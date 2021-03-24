@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 374491885595936090}
   - component: {fileID: 1101885942}
   m_Layer: 0
-  m_Name: Blade FR
+  m_Name: Rotor FR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -94,7 +94,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 0.001
   m_Drag: 0
-  m_AngularDrag: 0.02
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d95244e430aef3f4a8053cf52f5b3270, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Blades:
+  Rotors:
   - {fileID: 1438219931}
   - {fileID: 1101885943}
   - {fileID: 1566494816}
@@ -219,7 +219,7 @@ GameObject:
   - component: {fileID: 1468439263}
   - component: {fileID: 5033223359338865779}
   m_Layer: 0
-  m_Name: Body
+  m_Name: Frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -299,7 +299,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 0.14
   m_Drag: 0
-  m_AngularDrag: 0.01
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -334,7 +334,7 @@ GameObject:
   - component: {fileID: 6007656972012613515}
   - component: {fileID: 1566494815}
   m_Layer: 0
-  m_Name: Blade BR
+  m_Name: Rotor BR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -413,7 +413,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 0.001
   m_Drag: 0
-  m_AngularDrag: 0.02
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -484,7 +484,7 @@ GameObject:
   - component: {fileID: 5732582057604322178}
   - component: {fileID: 1438219930}
   m_Layer: 0
-  m_Name: Blade FL
+  m_Name: Rotor FL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -563,7 +563,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 0.001
   m_Drag: 0
-  m_AngularDrag: 0.02
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -634,7 +634,7 @@ GameObject:
   - component: {fileID: 2003420163178283134}
   - component: {fileID: 1064629067}
   m_Layer: 0
-  m_Name: Blade BL
+  m_Name: Rotor BL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -713,7 +713,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 0.001
   m_Drag: 0
-  m_AngularDrag: 0.02
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
