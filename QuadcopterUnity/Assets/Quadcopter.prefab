@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 374491885595936090}
   - component: {fileID: 1101885942}
   m_Layer: 0
-  m_Name: Rotor FR
+  m_Name: Rotor Front Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -203,8 +203,8 @@ MonoBehaviour:
   - {fileID: 1101885943}
   - {fileID: 1566494816}
   - {fileID: 1064629068}
-  Frame: {fileID: 1468439263}
-  UserVoltage: 0
+  Body: {fileID: 1468439263}
+  VoltageSlider: 0
 --- !u!1 &230538716272570118
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,7 +219,7 @@ GameObject:
   - component: {fileID: 1468439263}
   - component: {fileID: 5033223359338865779}
   m_Layer: 0
-  m_Name: Frame
+  m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -334,7 +334,7 @@ GameObject:
   - component: {fileID: 6007656972012613515}
   - component: {fileID: 1566494815}
   m_Layer: 0
-  m_Name: Rotor BR
+  m_Name: Rotor Back Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -484,7 +484,7 @@ GameObject:
   - component: {fileID: 5732582057604322178}
   - component: {fileID: 1438219930}
   m_Layer: 0
-  m_Name: Rotor FL
+  m_Name: Rotor Front Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -634,7 +634,7 @@ GameObject:
   - component: {fileID: 2003420163178283134}
   - component: {fileID: 1064629067}
   m_Layer: 0
-  m_Name: Rotor BL
+  m_Name: Rotor Back Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
