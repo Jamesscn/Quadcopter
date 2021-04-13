@@ -92,7 +92,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 230538716002079378}
   serializedVersion: 2
-  m_Mass: 0.001
+  m_Mass: 0.05
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 1
@@ -160,6 +160,9 @@ GameObject:
   m_Component:
   - component: {fileID: 230538716264830780}
   - component: {fileID: 174442266}
+  - component: {fileID: 3174177891804432623}
+  - component: {fileID: 8946120509874304544}
+  - component: {fileID: -1156871634473833202}
   m_Layer: 0
   m_Name: Quadcopter
   m_TagString: Untagged
@@ -204,7 +207,62 @@ MonoBehaviour:
   - {fileID: 1566494816}
   - {fileID: 1064629068}
   Body: {fileID: 1468439263}
-  VoltageSlider: 0
+--- !u!114 &3174177891804432623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230538716264830771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a79981a8a8507f44bc00770d04b4e61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  Body: {fileID: 230538716272570118}
+  Target: {fileID: 0}
+--- !u!114 &8946120509874304544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230538716264830771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BrainParameters:
+    VectorObservationSize: 16
+    NumStackedVectorObservations: 1
+    VectorActionSize: 04000000
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 1
+  m_Model: {fileID: 5022602860645237092, guid: b9475783074b2c34b95ed2d585b81c0f, type: 3}
+  m_InferenceDevice: 0
+  m_BehaviorType: 0
+  m_BehaviorName: Quadcopter
+  TeamId: 0
+  m_UseChildSensors: 1
+--- !u!114 &-1156871634473833202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230538716264830771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DecisionPeriod: 5
+  TakeActionsBetweenDecisions: 1
 --- !u!1 &230538716272570118
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,7 +355,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 230538716272570118}
   serializedVersion: 2
-  m_Mass: 0.14
+  m_Mass: 0.05
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 1
@@ -411,7 +469,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 230538716481404291}
   serializedVersion: 2
-  m_Mass: 0.001
+  m_Mass: 0.05
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 1
@@ -561,7 +619,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 230538716829433368}
   serializedVersion: 2
-  m_Mass: 0.001
+  m_Mass: 0.05
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 1
@@ -711,7 +769,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 230538716882286844}
   serializedVersion: 2
-  m_Mass: 0.001
+  m_Mass: 0.05
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 1

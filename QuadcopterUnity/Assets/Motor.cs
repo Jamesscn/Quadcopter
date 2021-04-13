@@ -3,33 +3,39 @@ using UnityEngine;
 public class Motor {
 
 	//A set of constants obtained from the datasheet of the motor.
-	private float TorqueConstant;
-	private float MotorConstant;
-	private float ArmatureResistance;
-	private float ArmatureInductance;
+	float TorqueConstant;
+	float MotorConstant;
+	float ArmatureResistance;
+	float ArmatureInductance;
 	
 	//The current is stored in this variable between time steps.
-	private float current;
+	float Current;
 
 	//Constructor class that is used to initialize all the constants.
-	public Motor(float torqueConstant, float motorConstant, float armatureResistance, float armatureInductance) {
-		TorqueConstant = torqueConstant;
-		MotorConstant = motorConstant;
-		ArmatureResistance = armatureResistance;
-		ArmatureInductance = armatureInductance;
+	public Motor() {
+		//Constants obtained from the Pittman 6216 6V motor datasheet.
+		TorqueConstant = 0.007F;
+		MotorConstant = 0.005F;
+		ArmatureResistance = 1.9F;
+		ArmatureInductance = 0.00101F;
 
 		//Initially, the motor consumes no current.
-		current = 0.0F;
+		Current = 0.0F;
 	}
 
 	//ComputeTorque obtains the torque using the motor armature model.
-	public float ComputeTorque(float voltageDifference, float angularVelocity) {
+	public float ComputeTorque(float VoltageDifference, float AngularVelocity) {
 		//The new current is calculated with the derived equation.
-		current = (voltageDifference * Time.fixedDeltaTime - MotorConstant * angularVelocity * Time.fixedDeltaTime + ArmatureInductance * current) / (ArmatureResistance * Time.fixedDeltaTime + ArmatureInductance);
+		Current = (VoltageDifference * Time.fixedDeltaTime - MotorConstant * AngularVelocity * Time.fixedDeltaTime + ArmatureInductance * Current) / (ArmatureResistance * Time.fixedDeltaTime + ArmatureInductance);
 
 		//The torque is calculated and returned.
-		float torque = TorqueConstant * current;
-		return torque;
+		float Torque = TorqueConstant * Current;
+		return Torque;
+	}
+
+	//Resets the motor to its initial conditions.
+	public void ResetMotor() {
+		Current = 0.0F;
 	}
 
 }
