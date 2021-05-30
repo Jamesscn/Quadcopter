@@ -7,16 +7,13 @@ public class GameManager : MonoBehaviour {
 	public Vector3 ChaseOffset, BodyOffset;
 	private int CameraActiveIndex;
 
-    // Start is called before the first frame update
     void Start() {
-        //instantiate the objects
 		CameraActiveIndex = 2;
 		GroundCamera.gameObject.SetActive(false);
 		BodyCamera.gameObject.SetActive(false);
 		ChaseCamera.gameObject.SetActive(true);
     }
 
-    // Update is called once per frame
     void Update() {
 		if(Input.GetButtonDown("Camera")) {
 			CameraActiveIndex = (CameraActiveIndex + 1) % 3;
@@ -27,7 +24,7 @@ public class GameManager : MonoBehaviour {
 
         GroundCamera.transform.LookAt(Quadcopter.transform.position);
 		ChaseCamera.transform.position = Quadcopter.transform.position + ChaseOffset;
-		BodyCamera.transform.SetPositionAndRotation(Quadcopter.transform.position + BodyOffset, Quadcopter.transform.rotation);
+		BodyCamera.transform.SetPositionAndRotation(Quadcopter.transform.TransformPoint(BodyOffset), Quadcopter.transform.rotation);
     }
 	
 }
