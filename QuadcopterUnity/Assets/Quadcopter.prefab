@@ -345,10 +345,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6778125078070642879}
-  - component: {fileID: 8541366828524380361}
+  - component: {fileID: 5319032403004659807}
+  - component: {fileID: 6964786146181852537}
+  - component: {fileID: 6546182371257478746}
   - component: {fileID: 6546182371257478748}
   - component: {fileID: 6546182371257478749}
-  - component: {fileID: 6546182371257478746}
   m_Layer: 0
   m_Name: Quadcopter
   m_TagString: Untagged
@@ -364,7 +365,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6150628962300137989}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.15, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3171835729478297121}
@@ -375,7 +376,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8541366828524380361
+--- !u!114 &5319032403004659807
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -384,7 +385,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6150628962300137989}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d95244e430aef3f4a8053cf52f5b3270, type: 3}
+  m_Script: {fileID: 11500000, guid: 42d9155c04bf69e8eaa6dd24d4402bdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Body: {fileID: 6310611921231833952}
@@ -399,7 +400,43 @@ MonoBehaviour:
   - {x: 0.5, y: 0, z: -0.5}
   - {x: -0.5, y: 0, z: -0.5}
   ThrustCoefficient: 0.01
-  TorqueCoefficient: 1
+--- !u!114 &6964786146181852537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6150628962300137989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a826a945b92473e4bbbcd74762bd32f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Body: {fileID: 6310611921231833952}
+  Target: {fileID: 0}
+  InterfaceSkin: {fileID: 11400000, guid: ae520167a95ffaa4ab4a9f14b29d3500, type: 2}
+  ThrustCoefficients: {x: 0.2, y: 0.001, z: 0.7}
+  RotationCoefficients: {x: 0.01, y: 0.000001, z: 0.05}
+  CorrectiveCoefficients: {x: 0.2, y: 0, z: 0.7}
+  ManualMode: 0
+--- !u!114 &6546182371257478746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6150628962300137989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a79981a8a8507f44bc00770d04b4e61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 500
+  Body: {fileID: 6310611921231833952}
+  Target: {fileID: 0}
 --- !u!114 &6546182371257478748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -427,35 +464,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 11
-    NumStackedVectorObservations: 1
+    VectorObservationSize: 16
+    NumStackedVectorObservations: 24
     VectorActionSize: 04000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
-  m_Model: {fileID: 5022602860645237092, guid: 84184bebd2fccaee0b5494b916158fcb, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: 5f9d2752c93ea09d6b597834c9db5222, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: Quadcopter
   TeamId: 0
   m_UseChildSensors: 1
---- !u!114 &6546182371257478746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6150628962300137989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a79981a8a8507f44bc00770d04b4e61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 1000
-  Body: {fileID: 6310611921231833952}
-  Target: {fileID: 0}
 --- !u!1 &6310611921231833955
 GameObject:
   m_ObjectHideFlags: 0
@@ -468,7 +487,6 @@ GameObject:
   - component: {fileID: 8689406949671413772}
   - component: {fileID: 4559175463042879828}
   - component: {fileID: 6310611921231833952}
-  - component: {fileID: 6310611921231833953}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -557,17 +575,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!64 &6310611921231833953
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6310611921231833955}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -6360558719573625917, guid: ffd8ac7d015615331984c18c8f1ec5ac, type: 3}
