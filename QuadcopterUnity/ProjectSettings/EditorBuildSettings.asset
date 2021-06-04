@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Hover.unity
+    guid: 8526dd531f45d970f8f2fe646bf8f384
   m_configObjects: {}

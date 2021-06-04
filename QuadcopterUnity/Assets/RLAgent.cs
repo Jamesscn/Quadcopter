@@ -18,7 +18,7 @@ public class RLAgent : Agent {
 
 	public override void OnEpisodeBegin() {
 		if(lastEpisodeReward != 0.0F) {
-			Debug.Log("Episode Reward: " + lastEpisodeReward);
+			//Debug.Log("Episode Reward: " + lastEpisodeReward);
 		}
 		gameObject.SendMessage("ResetSimulation");
 		lastEpisodeReward = 0.0F;
@@ -45,6 +45,7 @@ public class RLAgent : Agent {
 		float distance = differenceVector.magnitude;
 		float maxDistance = 10.5F;
 		float distancePower = 0.5F;
+		float spinImportance = 0.02F;
 		float measuredPitch = Body.transform.rotation.eulerAngles[0];
 		float measuredYaw = Body.transform.rotation.eulerAngles[1];
 		float measuredRoll = Body.transform.rotation.eulerAngles[2];
@@ -67,7 +68,7 @@ public class RLAgent : Agent {
 		sensor.AddObservation(ComponentNormalize(Body.velocity));
 		sensor.AddObservation(ComponentNormalize(Body.angularVelocity));
 		sensor.AddObservation(ComponentNormalize(differenceVector));
-		sensor.AddObservation(Mathf.Max(0.0F, 1.0F - Mathf.Pow(distance / maxDistance, distancePower)));
+		sensor.AddObservation(Mathf.Max(0.0F, 1.0F - Mathf.Pow(distance / maxDistance, distancePower)) - spinImportance * Body.angularVelocity.magnitude);
 	}
 
 	void FixedUpdate() {
@@ -75,7 +76,8 @@ public class RLAgent : Agent {
 		float distance = differenceVector.magnitude;
 		float maxDistance = 10.5F;
 		float distancePower = 0.5F;
-		float reward = Mathf.Max(0.0F, 1.0F - Mathf.Pow(distance / maxDistance, distancePower));
+		float spinImportance = 0.02F;
+		float reward = Mathf.Max(0.0F, 1.0F - Mathf.Pow(distance / maxDistance, distancePower)) - spinImportance * Body.angularVelocity.magnitude;
 
 		if(distance > 2 * maxDistance) {
 			EndEpisode();
