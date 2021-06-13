@@ -6,7 +6,10 @@ public class Dynamics : MonoBehaviour {
 	public Rigidbody Body;
 	public GameObject[] RotorObjects;
 	public Vector3[] RotorPositions;
-
+	public float SpawnRadius;
+	public float MaxInitialVelocity;
+	public float MaxInitialAngularVelocity;
+	public bool StartRotated;
 	Rotor[] Rotors = {
 		new Rotor(),
 		new Rotor(),
@@ -14,14 +17,9 @@ public class Dynamics : MonoBehaviour {
 		new Rotor()
 	};
 
-	public double ThrustCoefficient;
-	
-	double AirDensity = 1.2256D;
-	float SpawnRange = 6.0F;
-
+	double GizmoScale = 0.1D;
 	double[] MotorVoltages = {0.0D, 0.0D, 0.0D, 0.0D};
 	double[] TorqueDirections = {1.0D, -1.0D, 1.0D, -1.0D};
-
 	bool SimulationRestarted = false;
 
 	public void ResetSimulation() {
@@ -31,11 +29,12 @@ public class Dynamics : MonoBehaviour {
 		for(int i = 0; i < 4; i++) {
 			Rotors[i].ResetRotor();
 		}
-		Body.transform.localPosition = new Vector3(UnityEngine.Random.Range(-SpawnRange, SpawnRange), UnityEngine.Random.Range(-SpawnRange, SpawnRange), UnityEngine.Random.Range(-SpawnRange, SpawnRange));
-		//try random rotations
-		Body.transform.localRotation = Quaternion.identity;
-		Body.velocity = Vector3.zero;
-		Body.angularVelocity = Vector3.zero;
+		if(StartRotated) {
+			Body.transform.localRotation = UnityEngine.Random.rotationUniform;
+		}
+		Body.transform.localPosition = UnityEngine.Random.insideUnitSphere * SpawnRadius;
+		Body.velocity = UnityEngine.Random.insideUnitSphere * MaxInitialVelocity;
+		Body.angularVelocity = UnityEngine.Random.insideUnitSphere * MaxInitialAngularVelocity;
 		MotorVoltages = new double[] {0.0D, 0.0D, 0.0D, 0.0D};
 		Body.gameObject.SetActive(false);
 		SimulationRestarted = false;
@@ -48,7 +47,6 @@ public class Dynamics : MonoBehaviour {
 	void Update() {
 		for(int i = 0; i < 4; i++) {
 			Vector3 WorldRotorPosition = Body.transform.TransformPoint(RotorPositions[i]);
-
 			RotorObjects[i].transform.position = WorldRotorPosition;
 			RotorObjects[i].transform.rotation = Body.transform.rotation;
 			RotorObjects[i].transform.RotateAround(WorldRotorPosition, Body.transform.up, (float)(TorqueDirections[i] * Rotors[i].AngularDisplacement * 180.0D / Math.PI));
@@ -62,49 +60,26 @@ public class Dynamics : MonoBehaviour {
 			Body.isKinematic = false;
 			SimulationRestarted = true;
 		}
-		double yawTorque = 0.0D;
+		double YawTorque = 0.0D;
 		for(int i = 0; i < 4; i++) {
-			Rotors[i].UpdateMotor(MotorVoltages[i]);
+			Rotors[i].UpdateRotor(MotorVoltages[i]);
 			Vector3 WorldRotorPosition = Body.transform.TransformPoint(RotorPositions[i]);
-			double liftMagnitude = ThrustCoefficient * AirDensity * Math.Pow(Rotors[i].AngularVelocity, 2) * Math.Pow(Rotors[i].Diameter, 4);
-			//ignore drag for now
-			//double dragMagnitude = TorqueCoefficient * AirDensity * Math.Pow(Rotors[i].AngularVelocity, 2) * Math.Pow(Rotors[i].Diameter, 5);
-			double torqueMagnitude = Rotors[i].Torque;
-
-			double rotorDirection = 0.0D;
-			if(Rotors[i].AngularVelocity > 0) {
-				rotorDirection = 1.0D;
-			} else if(Rotors[i].AngularVelocity < 0) {
-				rotorDirection = -1.0D;
-			}
-
-			yawTorque += TorqueDirections[i] * torqueMagnitude;			
-			Body.AddForceAtPosition((float)(rotorDirection * liftMagnitude) * Body.transform.up, WorldRotorPosition);
+			YawTorque += TorqueDirections[i] * Rotors[i].NetTorque;	
+			Body.AddForceAtPosition((float)Rotors[i].LiftForce * Body.transform.up, WorldRotorPosition);
 		}
-		Body.AddTorque((float)yawTorque * Body.transform.up);
+		Body.AddTorque((float)YawTorque * Body.transform.up);
     }
 
 	void OnDrawGizmos() {
 		Gizmos.color = Color.red;
-		double yawTorque = 0.0D;
+		double YawTorque = 0.0D;
 		for(int i = 0; i < 4; i++) {
-			double liftMagnitude = ThrustCoefficient * AirDensity * Math.Pow(Rotors[i].AngularVelocity, 2) * Math.Pow(Rotors[i].Diameter, 4);
-			double torqueMagnitude = Rotors[i].Torque;
-
-			double rotorDirection = 0.0D;
-			if(Rotors[i].AngularVelocity > 0) {
-				rotorDirection = 1.0D;
-			} else if(Rotors[i].AngularVelocity < 0) {
-				rotorDirection = -1.0D;
-			}
-
-			yawTorque += TorqueDirections[i] * torqueMagnitude;			
 			Vector3 WorldRotorPosition = Body.transform.TransformPoint(RotorPositions[i]);
-
-			Gizmos.DrawRay(WorldRotorPosition, 0.1F * (float)(rotorDirection * liftMagnitude) * Body.transform.up);
+			YawTorque += TorqueDirections[i] * Rotors[i].NetTorque;			
+			Gizmos.DrawRay(WorldRotorPosition, (float)(GizmoScale * Rotors[i].LiftForce) * Body.transform.up);
 		}
 		Gizmos.color = Color.green;
-		Gizmos.DrawRay(Body.transform.position, (float)yawTorque * Body.transform.up);
+		Gizmos.DrawRay(Body.transform.position, (float)(GizmoScale * YawTorque) * Body.transform.up);
 	}
 
 }

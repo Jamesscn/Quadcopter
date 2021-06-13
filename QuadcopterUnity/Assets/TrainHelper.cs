@@ -3,16 +3,16 @@ using UnityEngine;
 public class TrainHelper : MonoBehaviour {
 
     public GameObject TrainingArea;
-    public int instances;
-    public int rows;
-    public float separation;
+    public int Instances;
+    public int Rows;
+    public float Separation;
 
     void Start() {
-        for(int i = 0; i < instances; i++) {
-            int x = i % rows;
-            int z = (i / rows) % rows;
-            int y = (i / (rows * rows));
-            Vector3 AreaPosition = new Vector3(x - rows / 2.0F, y, z - rows / 2.0F) * separation;
+        for(int i = 0; i < Instances; i++) {
+            int x = i % Rows;
+            int z = (i / Rows) % Rows;
+            int y = (i / (Rows * Rows));
+            Vector3 AreaPosition = new Vector3(x - Rows / 2.0F, y, z - Rows / 2.0F) * Separation;
             Instantiate(TrainingArea, AreaPosition, Quaternion.identity);
         }
     }
