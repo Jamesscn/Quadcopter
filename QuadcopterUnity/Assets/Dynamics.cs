@@ -1,6 +1,11 @@
 using UnityEngine;
 using System;
 
+/**
+The Dynamics class is in charge of simulating the dynamics of the quadcopter. It does this by first creating four instances of the Rotor class to simulate torque and lift on each rotor, then adding these forces onto the body of the quadcopter.
+
+This class also sets the initial parameters of the quadcopter (position, rotation, velocity and angular velocity) at the beginning of each episode, creates the illusion that the rotors are spinning in the simulation and displays several Gizmos that show the magnitude of the forces and yaw while debugging.
+*/
 public class Dynamics : MonoBehaviour {
 
 	public Rigidbody Body;
@@ -22,6 +27,7 @@ public class Dynamics : MonoBehaviour {
 	double[] TorqueDirections = {1.0D, -1.0D, 1.0D, -1.0D};
 	bool SimulationRestarted = false;
 
+	//This function resets the simulation and gives the quadcopter an initial position, rotation, velocity and angular velocity.
 	public void ResetSimulation() {
 		Body.useGravity = false;
 		Body.isKinematic = true;
@@ -31,19 +37,21 @@ public class Dynamics : MonoBehaviour {
 		}
 		if(StartRotated) {
 			Body.transform.localRotation = UnityEngine.Random.rotationUniform;
+		} else {
+			Body.transform.localRotation = Quaternion.identity;
 		}
 		Body.transform.localPosition = UnityEngine.Random.insideUnitSphere * SpawnRadius;
-		Body.velocity = UnityEngine.Random.insideUnitSphere * MaxInitialVelocity;
-		Body.angularVelocity = UnityEngine.Random.insideUnitSphere * MaxInitialAngularVelocity;
 		MotorVoltages = new double[] {0.0D, 0.0D, 0.0D, 0.0D};
 		Body.gameObject.SetActive(false);
 		SimulationRestarted = false;
 	}
 
+	//This function is called outside of this class by the controller, with a parameter that sets the voltage differences across each of the motors.
 	public void SetVoltages(double[] voltages) {
 		MotorVoltages = voltages;
 	}
 
+	//This function runs everytime the viewport is updated, and is used to create the illusion that the rotor models are spinning.
 	void Update() {
 		for(int i = 0; i < 4; i++) {
 			Vector3 WorldRotorPosition = Body.transform.TransformPoint(RotorPositions[i]);
@@ -53,13 +61,18 @@ public class Dynamics : MonoBehaviour {
 		}
 	}
 
+	//This function runs at the frequency of the physics engine, and is used to calculate and apply the forces and torques on the body.
 	void FixedUpdate() {
+		//The following lines of code are a continuation of ResetSimulation, and are needed to avoid undesired effects such as the velocity of the frame before resetting from being applied.
 		if(!SimulationRestarted) {
 			Body.gameObject.SetActive(true);
 			Body.useGravity = true;
 			Body.isKinematic = false;
 			SimulationRestarted = true;
+			Body.velocity = UnityEngine.Random.insideUnitSphere * MaxInitialVelocity;
+			Body.angularVelocity = UnityEngine.Random.insideUnitSphere * MaxInitialAngularVelocity;
 		}
+		//The net yaw torque over the entire body and the forces on each of the rotors are applied to the body of the quadcopter.
 		double YawTorque = 0.0D;
 		for(int i = 0; i < 4; i++) {
 			Rotors[i].UpdateRotor(MotorVoltages[i]);
@@ -70,6 +83,7 @@ public class Dynamics : MonoBehaviour {
 		Body.AddTorque((float)YawTorque * Body.transform.up);
     }
 
+	//The following function is used to show the forces and yaw torque while debugging.
 	void OnDrawGizmos() {
 		Gizmos.color = Color.red;
 		double YawTorque = 0.0D;

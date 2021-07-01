@@ -1,5 +1,9 @@
 using UnityEngine;
 
+
+/**
+The Interface class is used to draw a graphical interface which allows the Thrust, Yaw, Pitch and Roll to be adjusted while debugging.
+*/
 public class Interface : MonoBehaviour {
     
     public GUISkin InterfaceSkin;

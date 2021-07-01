@@ -1,93 +1,173 @@
-using UnityEngine;
+using System;
 
-//coefficients:
-//thrust: 0.2, 0.001, 0.7
-//rotation: 0.01, 1e-6, 0.05
+public class Genome : IComparable {
 
-//generalise this later
+    static Random RandomGenerator;
+    static double MinValue, MaxValue;
+    static int Genes;
 
-public class GeneticAlgorithm : MonoBehaviour {
+    double Fitness;
+    double[] Chromosome;
 
-    public Rigidbody Body;
-    public GameObject Target;
-    public int MaxStep;
-    public double MaxVoltage;
-    public bool AllowReverseFlight;
-
-    int CurrentStep = 0;
-
-    PID ThrustController;
-	PID YawController;
-	PID PitchController;
-	PID RollController;
-	PID CorrectivePitchController;
-	PID CorrectiveRollController;
-
-    public void Start() {
-        ThrustController = new PID(0.2D, 0.001D, 0.7D);
-        YawController = new PID(0.01D, 0.000001D, 0.05D);
-        PitchController = new PID(0.01D, 0.000001D, 0.05D);
-        RollController = new PID(0.01D, 0.000001D, 0.05D);
-        CorrectivePitchController = new PID(0.0D, 0.0D, 0.0D);
-        CorrectiveRollController = new PID(0.0D, 0.0D, 0.0D);
+    public Genome(int genes, double min, double max, Random randomGenerator) {
+        RandomGenerator = randomGenerator;
+        Genes = genes;
+        MinValue = min;
+        MaxValue = max;
+        Chromosome = new double[Genes];
+        for(int i = 0; i < genes; i++) {
+            Chromosome[i] = GetRandomAlelle();
+        }
     }
 
-    public double ScaleAction(double value, double min, double max) {
-        return (value + 1.0D) * (max - min) / 2.0D + min;
+    public Genome() {
+        Chromosome = new double[Genes];
     }
 
-    public double[] Controller() {
-        double[] MotorSignals = {0.0D, 0.0D, 0.0D, 0.0D};
-        Vector3 localTarget = Body.transform.InverseTransformPoint(Target.transform.position);
-        float pitchDisplacement = -localTarget[2];
-        float rollDisplacement = localTarget[0];
-        float targetHeight = Target.transform.position[1];
-        float measuredHeight = Body.transform.position[1];
-        float measuredYaw = Body.transform.rotation.eulerAngles[1];
-        float measuredPitch = Body.transform.rotation.eulerAngles[0];
-        float measuredRoll = Body.transform.rotation.eulerAngles[2];
-        if(measuredYaw > 180.0F) {
-            measuredYaw -= 360.0F;
-        }
-        if(measuredPitch > 180.0F) {
-            measuredPitch -= 360.0F;
-        }
-        if(measuredRoll > 180.0F) {
-            measuredRoll -= 360.0F;
-        }
-        double CorrectivePitchAngle = CorrectivePitchController.ComputeOutput(0.0D, pitchDisplacement);
-        double CorrectiveRollAngle = CorrectiveRollController.ComputeOutput(0.0D, rollDisplacement);
-        double Thrust = ThrustController.ComputeOutput(targetHeight, measuredHeight);
-        double Yaw = YawController.ComputeOutput(0.0D, measuredYaw);
-        double Pitch = PitchController.ComputeOutput(CorrectivePitchAngle, measuredPitch);
-        double Roll = RollController.ComputeOutput(CorrectiveRollAngle, measuredRoll);
-        MotorSignals[0] = Thrust + Yaw - Pitch - Roll;
-		MotorSignals[1] = Thrust - Yaw - Pitch + Roll;
-		MotorSignals[2] = Thrust + Yaw + Pitch + Roll;
-		MotorSignals[3] = Thrust - Yaw + Pitch - Roll;
-        return MotorSignals;
+    public int GetGenes() {
+        return Chromosome.Length;
     }
 
-    public void SendActions(double[] vectorAction) {
-		double[] voltages = new double[4];
-		for(int i = 0; i < 4; i++) {
-			if(AllowReverseFlight) {
-				voltages[i] = ScaleAction(vectorAction[i], -MaxVoltage, MaxVoltage);
-			} else {
-				voltages[i] = ScaleAction(vectorAction[i], 0, MaxVoltage);
-			}
-		}
-		gameObject.SendMessage("SetVoltages", voltages);
-	}
+    public double[] GetChromosome() {
+        return Chromosome;
+    }
 
-    public void FixedUpdate() {
-        //send and receive actions
-        SendActions(Controller());
-        CurrentStep += 1;
-        if(CurrentStep > MaxStep) {
-            gameObject.SendMessage("ResetSimulation");
-            CurrentStep = 0;
+    public void SetAlelle(int gene, double alelle) {
+        Chromosome[gene] = alelle;
+    }
+
+    public void SetFitness(double fitness) {
+        Fitness = fitness;
+    }
+
+    public double GetFitness() {
+        return Fitness;
+    }
+
+    public int CompareTo(object obj) {
+        Genome other = obj as Genome;
+        if(Fitness > other.GetFitness()) {
+            return -1;
         }
+        return 1;
+    }
+
+    public static double GetRandomAlelle() {
+        return (MaxValue - MinValue) * RandomGenerator.NextDouble() + MinValue;
+    }
+
+    public static Tuple<Genome, Genome> Crossover(Genome firstParent, Genome secondParent) {
+        Genome firstChild = new Genome();
+        Genome secondChild = new Genome();
+        for(int i = 0; i < firstParent.GetGenes(); i++) {
+            if(RandomGenerator.NextDouble() < 0.5D) {
+                firstChild.SetAlelle(i, firstParent.GetChromosome()[i]);
+                secondChild.SetAlelle(i, secondParent.GetChromosome()[i]);
+            } else {
+                firstChild.SetAlelle(i, secondParent.GetChromosome()[i]);
+                secondChild.SetAlelle(i, firstParent.GetChromosome()[i]);
+            }
+        }
+        return new Tuple<Genome, Genome>(firstChild, secondChild);
+    }
+
+    public static Genome Mutate(Genome original, double mutationProbability) {
+        Genome mutated = new Genome();
+        for(int i = 0; i < original.GetGenes(); i++) {
+            if(RandomGenerator.NextDouble() < mutationProbability) {
+                mutated.SetAlelle(i, GetRandomAlelle());
+            } else {
+                mutated.SetAlelle(i, original.GetChromosome()[i]);
+            }
+        }
+        return mutated;
+    }
+
+}
+
+public class GeneticAlgorithm {
+
+    static Random RandomGenerator;
+    int PopulationSize, GenesPerChromosome;
+    double SurvivalProportion, MutationProbability;
+    Genome[] Population;
+
+    public GeneticAlgorithm(int populationSize, int genesPerChromosome, double minValue, double maxValue, double survivalProportion, double mutationProbability) {
+        RandomGenerator = new Random();
+        PopulationSize = populationSize;
+        GenesPerChromosome = genesPerChromosome;
+        SurvivalProportion = survivalProportion;
+        MutationProbability = mutationProbability;
+
+        Population = new Genome[populationSize];
+        for(int i = 0; i < PopulationSize; i++) {
+            Population[i] = new Genome(genesPerChromosome, minValue, maxValue, RandomGenerator);
+        }
+    }
+
+    public Genome GetGenome(int index) {
+        return Population[index];
+    }
+
+    public void SetFitness(int index, double fitness) {
+        Population[index].SetFitness(fitness);
+    }
+
+    Tuple<Genome, Genome> SelectRandomParents(double[] selectionProbabilities) {
+        double firstParentRandom = RandomGenerator.NextDouble();
+        double secondParentRandom = RandomGenerator.NextDouble();
+        Genome firstParent = Population[PopulationSize - 1];
+        Genome secondParent = Population[PopulationSize - 1];
+        for(int i = 0; i < PopulationSize; i++) {
+            if(firstParentRandom <= selectionProbabilities[i]) {
+                firstParent = Population[i];
+                break;
+            }
+        }
+        for(int i = 0; i < PopulationSize; i++) {
+            if(secondParentRandom <= selectionProbabilities[i]) {
+                secondParent = Population[i];
+                break;
+            }
+        }
+        return new Tuple<Genome, Genome>(firstParent, secondParent);
+    }
+
+    public void Evolve() {
+        Array.Sort(Population);
+        Genome[] NextGeneration = new Genome[PopulationSize];
+        int currentIndividual = 0;
+        for(int i = 0; i < PopulationSize * SurvivalProportion; i++) {
+            NextGeneration[currentIndividual] = Population[i];
+            currentIndividual++;
+        }
+        double[] cumulativeFitnesses = new double[PopulationSize];
+        double sumOfFitnesses = 0;
+        for(int i = 0; i < PopulationSize; i++) {
+            sumOfFitnesses += Population[i].GetFitness();
+        }
+        double lastCumulativeFitness = 0.0D;
+        for(int i = 0; i < PopulationSize; i++) {
+            cumulativeFitnesses[i] = lastCumulativeFitness + Population[i].GetFitness() / sumOfFitnesses;
+            lastCumulativeFitness = cumulativeFitnesses[i];
+        }
+        while(currentIndividual != PopulationSize) {
+            Tuple<Genome, Genome> parents = SelectRandomParents(cumulativeFitnesses);
+            Tuple<Genome, Genome> children = Genome.Crossover(parents.Item1, parents.Item2);
+            Genome firstChild = Genome.Mutate(children.Item1, MutationProbability);
+            Genome secondChild = Genome.Mutate(children.Item2, MutationProbability);
+            NextGeneration[currentIndividual] = firstChild;
+            currentIndividual++;
+            if(currentIndividual == PopulationSize) {
+                break;
+            }
+            NextGeneration[currentIndividual] = secondChild;
+            currentIndividual++;
+        }
+    }
+
+    public Genome GetFittest() {
+        return Population[0];
     }
 
 }

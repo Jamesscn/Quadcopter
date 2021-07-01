@@ -1,29 +1,26 @@
 using UnityEngine;
+using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 
 public class HoverAgent : RLAgent {
 
+	public GameObject Target;
+
 	public override void CollectObservations(VectorSensor sensor) {
 		Vector3 differenceVector = Target.transform.position - Body.transform.position;
 		float distance = differenceVector.magnitude;
-		float maxDistance = 8.0F;
+		float maxDistance = 14.0F;
 		float distancePower = 0.5F;
 		float spinImportance = 0.02F;
-		float measuredYaw = Body.transform.rotation.eulerAngles[1];
-        float measuredPitch = Body.transform.rotation.eulerAngles[0];
-        float measuredRoll = Body.transform.rotation.eulerAngles[2];
-        if(measuredYaw > 180.0F) {
-            measuredYaw -= 360.0F;
+		float measuredYaw = Mathf.Atan2(Body.transform.right.z, Body.transform.right.x);
+        float measuredPitch = Mathf.Atan2(Body.transform.forward.y, Body.transform.forward.z);
+        float measuredRoll = Mathf.Atan2(Body.transform.right.y, Body.transform.right.x);
+        if(Vector3.Dot(Body.transform.up, Vector3.up) < 0) {
+            measuredYaw = -Mathf.Atan2(Body.transform.forward.x, Body.transform.forward.z);
         }
-        if(measuredPitch > 180.0F) {
-            measuredPitch -= 360.0F;
-        }
-        if(measuredRoll > 180.0F) {
-            measuredRoll -= 360.0F;
-        }
-		measuredYaw /= 180.0F;
-		measuredPitch /= 180.0F;
-		measuredRoll /= 180.0F;
+		measuredYaw /= Mathf.PI;
+		measuredPitch /= Mathf.PI;
+		measuredRoll /= Mathf.PI;
 		sensor.AddObservation(measuredYaw);
 		sensor.AddObservation(measuredPitch);
 		sensor.AddObservation(measuredRoll);
@@ -38,18 +35,19 @@ public class HoverAgent : RLAgent {
 	void FixedUpdate() {
 		Vector3 differenceVector = Target.transform.position - Body.transform.position;
 		float distance = differenceVector.magnitude;
-		float maxDistance = 8.0F;
+		float maxDistance = 14.0F;
 		float distancePower = 0.5F;
 		float spinImportance = 0.02F;
-		float reward = Mathf.Max(0.0F, 1.0F - Mathf.Pow(distance / maxDistance, distancePower)) - spinImportance * Body.angularVelocity.magnitude;
-		if(distance > 1.5F * maxDistance) {
+		float distanceReward = Mathf.Max(0.0F, 1.0F - Mathf.Pow(distance / maxDistance, distancePower));
+		float spinPenalty = -spinImportance * Body.angularVelocity.magnitude;
+		AddReward((distanceReward - spinPenalty) / Mathf.Max(1, MaxStep));
+		if(StepCount == MaxStep - 1 || distance > maxDistance) {
+			Academy.Instance.StatsRecorder.Add("Final Distance", distance, StatAggregationMethod.Average);
+			Academy.Instance.StatsRecorder.Add("Final Speed", Body.velocity.magnitude, StatAggregationMethod.Average);
+			Academy.Instance.StatsRecorder.Add("Final Angular Speed", Body.angularVelocity.magnitude, StatAggregationMethod.Average);
+			Academy.Instance.StatsRecorder.Add("Final Vertical Dot Product", Vector3.Dot(Body.transform.up, Vector3.up));
 			EndEpisode();
-		} else {
-			AddReward(reward / Mathf.Max(1, MaxStep));
 		}
-		//add useful metrics such as distance, speed, orientation and angular velocity
-		//probably best to ad these at the end
-		//Academy.Instance.StatsRecorder.Add();
 	}
 	
 }

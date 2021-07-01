@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public class TrainHelper : MonoBehaviour {
+/**
+The RLTrainer class creates multiple agents in parallel to increase the speed of training.
+*/
+public class RLTrainer : MonoBehaviour {
 
     public GameObject TrainingArea;
     public int Instances;

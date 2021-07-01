@@ -401,6 +401,7 @@ MonoBehaviour:
   SpawnRadius: 6
   MaxInitialVelocity: 2
   MaxInitialAngularVelocity: 4
+  StartRotated: 0
 --- !u!114 &6119949997061543035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,7 +548,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6310611921231833955}
   serializedVersion: 2
-  m_Mass: 1.439
+  m_Mass: 3
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 1
