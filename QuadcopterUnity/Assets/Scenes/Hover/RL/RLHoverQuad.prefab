@@ -162,10 +162,7 @@ MonoBehaviour:
   - {x: 0.5, y: 0, z: 0.5}
   - {x: 0.5, y: 0, z: -0.5}
   - {x: -0.5, y: 0, z: -0.5}
-  SpawnRadius: 6
-  MaxInitialVelocity: 0
-  MaxInitialAngularVelocity: 0
-  StartRotated: 1
+  RandomStart: 1
 --- !u!114 &7783525968018824828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,8 +180,7 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 500
   Body: {fileID: 2142205642498423854}
-  AllowReverseFlight: 0
-  MaxVoltage: 24
+  MaxVoltage: 44.4
   Target: {fileID: 0}
 --- !u!114 &2217748682116907830
 MonoBehaviour:
@@ -213,7 +209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 17
+    VectorObservationSize: 15
     NumStackedVectorObservations: 1
     VectorActionSize: 04000000
     VectorActionDescriptions: []

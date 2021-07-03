@@ -11,10 +11,7 @@ public class Dynamics : MonoBehaviour {
 	public Rigidbody Body;
 	public GameObject[] RotorObjects;
 	public Vector3[] RotorPositions;
-	public float SpawnRadius;
-	public float MaxInitialVelocity;
-	public float MaxInitialAngularVelocity;
-	public bool StartRotated;
+	public bool RandomStart;
 	Rotor[] Rotors = {
 		new Rotor(),
 		new Rotor(),
@@ -35,12 +32,16 @@ public class Dynamics : MonoBehaviour {
 		for(int i = 0; i < 4; i++) {
 			Rotors[i].ResetRotor();
 		}
-		if(StartRotated) {
-			Body.transform.localRotation = UnityEngine.Random.rotationUniform;
+		if(RandomStart) {
+			float InitialYaw = UnityEngine.Random.Range(-90.0F, 90.0F);
+			float InitialPitch = UnityEngine.Random.Range(-45.0F, 45.0F);
+			float InitialRoll = UnityEngine.Random.Range(-45.0F, 45.0F);
+			Body.transform.localRotation = Quaternion.Euler(InitialPitch, InitialYaw, InitialRoll);
+			Body.transform.localPosition = UnityEngine.Random.insideUnitSphere * 5.0F;
 		} else {
-			Body.transform.localRotation = Quaternion.identity;
+			Body.transform.localRotation = Quaternion.Euler(45, 90, -45);
+			Body.transform.localPosition = new Vector3(1, 1, 1).normalized * 5.0F;
 		}
-		Body.transform.localPosition = UnityEngine.Random.insideUnitSphere * SpawnRadius;
 		MotorVoltages = new double[] {0.0D, 0.0D, 0.0D, 0.0D};
 		Body.gameObject.SetActive(false);
 		SimulationRestarted = false;
@@ -69,8 +70,8 @@ public class Dynamics : MonoBehaviour {
 			Body.useGravity = true;
 			Body.isKinematic = false;
 			SimulationRestarted = true;
-			Body.velocity = UnityEngine.Random.insideUnitSphere * MaxInitialVelocity;
-			Body.angularVelocity = UnityEngine.Random.insideUnitSphere * MaxInitialAngularVelocity;
+			//Body.velocity = UnityEngine.Random.insideUnitSphere * MaxInitialVelocity;
+			//Body.angularVelocity = UnityEngine.Random.insideUnitSphere * MaxInitialAngularVelocity;
 		}
 		//The net yaw torque over the entire body and the forces on each of the rotors are applied to the body of the quadcopter.
 		double YawTorque = 0.0D;

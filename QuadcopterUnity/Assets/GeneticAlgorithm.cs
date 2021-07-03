@@ -71,7 +71,27 @@ public class Genome : IComparable {
         return new Tuple<Genome, Genome>(firstChild, secondChild);
     }
 
-    public static Genome Mutate(Genome original, double mutationProbability) {
+    public static Genome MutateAdd(Genome original, double mutationProbability) {
+        Genome mutated = new Genome();
+        for(int i = 0; i < original.GetGenes(); i++) {
+            if(RandomGenerator.NextDouble() < mutationProbability) {
+                double shiftAmount = RandomGenerator.NextDouble() - 0.5D;
+                double newAlelle = original.GetChromosome()[i] + shiftAmount;
+                if(newAlelle < MinValue) {
+                    newAlelle = MinValue;
+                }
+                if(newAlelle > MaxValue) {
+                    newAlelle = MaxValue;
+                }
+                mutated.SetAlelle(i, newAlelle);
+            } else {
+                mutated.SetAlelle(i, original.GetChromosome()[i]);
+            }
+        }
+        return mutated;
+    }
+
+    public static Genome MutateReplace(Genome original, double mutationProbability) {
         Genome mutated = new Genome();
         for(int i = 0; i < original.GetGenes(); i++) {
             if(RandomGenerator.NextDouble() < mutationProbability) {
@@ -136,13 +156,14 @@ public class GeneticAlgorithm {
     public void Evolve() {
         Array.Sort(Population);
         Genome[] NextGeneration = new Genome[PopulationSize];
-        int currentIndividual = 0;
+        int currentPopulationSize = 0;
         for(int i = 0; i < PopulationSize * SurvivalProportion; i++) {
-            NextGeneration[currentIndividual] = Population[i];
-            currentIndividual++;
+            NextGeneration[currentPopulationSize] = Population[i];
+            currentPopulationSize++;
         }
         double[] cumulativeFitnesses = new double[PopulationSize];
-        double sumOfFitnesses = 0;
+        //This may work incorrectly for negative fitnesses
+        double sumOfFitnesses = 0.0D;
         for(int i = 0; i < PopulationSize; i++) {
             sumOfFitnesses += Population[i].GetFitness();
         }
@@ -151,19 +172,22 @@ public class GeneticAlgorithm {
             cumulativeFitnesses[i] = lastCumulativeFitness + Population[i].GetFitness() / sumOfFitnesses;
             lastCumulativeFitness = cumulativeFitnesses[i];
         }
-        while(currentIndividual != PopulationSize) {
+        while(currentPopulationSize != PopulationSize) {
             Tuple<Genome, Genome> parents = SelectRandomParents(cumulativeFitnesses);
             Tuple<Genome, Genome> children = Genome.Crossover(parents.Item1, parents.Item2);
-            Genome firstChild = Genome.Mutate(children.Item1, MutationProbability);
-            Genome secondChild = Genome.Mutate(children.Item2, MutationProbability);
-            NextGeneration[currentIndividual] = firstChild;
-            currentIndividual++;
-            if(currentIndividual == PopulationSize) {
+            Genome firstChild = Genome.MutateAdd(children.Item1, MutationProbability);
+            Genome secondChild = Genome.MutateAdd(children.Item2, MutationProbability);
+            firstChild = Genome.MutateReplace(firstChild, MutationProbability);
+            secondChild = Genome.MutateReplace(secondChild, MutationProbability);
+            NextGeneration[currentPopulationSize] = firstChild;
+            currentPopulationSize++;
+            if(currentPopulationSize == PopulationSize) {
                 break;
             }
-            NextGeneration[currentIndividual] = secondChild;
-            currentIndividual++;
+            NextGeneration[currentPopulationSize] = secondChild;
+            currentPopulationSize++;
         }
+        Population = NextGeneration;
     }
 
     public Genome GetFittest() {

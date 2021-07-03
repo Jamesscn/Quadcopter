@@ -8,7 +8,6 @@ public class Rotor {
 
 	public double Diameter, MomentOfInertia, TorqueConstant, BackEMFConstant, ArmatureResistance, ArmatureInductance, ViscousFriction, LiftCoefficient, DragCoefficient, AirDensity;
 	public double ElectromotiveForce, Current, ElectromagneticTorque, NetTorque, LiftForce, DragTorque, AngularVelocity, AngularDisplacement;
-	public int EulerSteps;
 
 	//The constructor sets the following values, which are mostly parameters obtained either from datasheets or by experimenting with the simulation.
 	public Rotor() {
@@ -22,7 +21,6 @@ public class Rotor {
 		LiftCoefficient = 0.0026D;
 		DragCoefficient = 0.00004D;
 		AirDensity = 1.2256D;
-		EulerSteps = 100;
 		ResetRotor();
 	}
 
@@ -46,7 +44,8 @@ public class Rotor {
 		}
 		//Due to precision errors which can lead to undesirable results, Euler's method has to be used to calculate the change in the model since the previous time step. The number of steps taken by Euler's method is defined by EulerSteps.
 		//As a sidenote, decreasing the time step of the physics engine leads to slower training from the reinforcement learning agents, so this is done instead.
-		double DeltaTime = Time.fixedDeltaTime / EulerSteps;
+		double DeltaTime = 0.0002D;
+		int EulerSteps = (int)(Time.fixedDeltaTime * 5000.0D);
 		for(int i = 0; i < EulerSteps; i++) {
 			Current += (InputVoltage - ElectromotiveForce - ArmatureResistance * Current) * DeltaTime / ArmatureInductance;
 			ElectromagneticTorque = TorqueConstant * Current;

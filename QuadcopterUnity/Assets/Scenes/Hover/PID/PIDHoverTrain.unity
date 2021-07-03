@@ -24,7 +24,7 @@ RenderSettings:
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: 2ca2318118ba6ebc1af771bf6066a668, type: 2}
   m_HaloStrength: 0.5
@@ -32,13 +32,13 @@ RenderSettings:
   m_FlareFadeSpeed: 3
   m_HaloTexture: {fileID: 0}
   m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
-  m_DefaultReflectionMode: 0
+  m_DefaultReflectionMode: 1
   m_DefaultReflectionResolution: 128
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.2589587, g: 0.31183743, b: 0.38329762, a: 1}
+  m_IndirectSpecularColor: {r: 0.3912015, g: 0.36495844, b: 0.23849016, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -97,7 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: fa0cf52ec434f601c9a8bbd50d4c6954,
+    type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -251,7 +252,7 @@ MonoBehaviour:
   Rows: 8
   Separation: 8
   SurvivalProportion: 0.4
-  MutationProbability: 0.15
+  MutationProbability: 0.2
 --- !u!4 &797152763
 Transform:
   m_ObjectHideFlags: 0
@@ -347,7 +348,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 20, y: 0, z: 0}
 --- !u!1001 &1298067103054359224
 PrefabInstance:
@@ -359,7 +360,7 @@ PrefabInstance:
     - target: {fileID: 3162195357163603984, guid: 5a0b1b400ecb1ff6d9cd44e697d6a19f,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3162195357163603984, guid: 5a0b1b400ecb1ff6d9cd44e697d6a19f,
         type: 3}
@@ -419,6 +420,11 @@ PrefabInstance:
     - target: {fileID: 4918974116022649572, guid: 5a0b1b400ecb1ff6d9cd44e697d6a19f,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6052119632238252500, guid: 5a0b1b400ecb1ff6d9cd44e697d6a19f,
+        type: 3}
+      propertyPath: RandomStart
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6052119632238252500, guid: 5a0b1b400ecb1ff6d9cd44e697d6a19f,

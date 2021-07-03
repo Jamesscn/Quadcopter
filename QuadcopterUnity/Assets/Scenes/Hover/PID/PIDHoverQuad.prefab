@@ -396,10 +396,7 @@ MonoBehaviour:
   - {x: 0.5, y: 0, z: 0.5}
   - {x: 0.5, y: 0, z: -0.5}
   - {x: -0.5, y: 0, z: -0.5}
-  SpawnRadius: 6
-  MaxInitialVelocity: 0
-  MaxInitialAngularVelocity: 0
-  StartRotated: 0
+  RandomStart: 0
 --- !u!114 &8988806231219086720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,7 +412,7 @@ MonoBehaviour:
   Body: {fileID: 6220837112777867025}
   Target: {fileID: 0}
   MaxStep: 500
-  MaxVoltage: 24
+  MaxVoltage: 44.4
   Training: 1
 --- !u!1 &6220837112777867026
 GameObject:

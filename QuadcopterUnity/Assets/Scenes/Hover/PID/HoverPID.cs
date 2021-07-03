@@ -12,7 +12,8 @@ public class HoverPID : MonoBehaviour {
     bool SentEndSignal;
     int TrainingIndex;
     int CurrentStep = 0;
-    double reward = 0.0D;
+    float Reward = 0.0F;
+    bool PIDInitialized = false;
 
     PID ThrustController;
 	PID YawController;
@@ -22,11 +23,14 @@ public class HoverPID : MonoBehaviour {
     PID DisplacementRollController;
 
     public void Start() {
-        SetPIDConstants(new double[]{0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D});
-        if(!Training) {
-            SetPIDConstants(new double[]{6.2686D, 4.195D, 4.4783D, 6.56D, 6.8595D, 1.5698D, 4.23247D, 1.2628D, 5.33989D});
+        if(!PIDInitialized) {
+            SetPIDConstants(new double[]{0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D});
+            if(!Training) {
+                SetPIDConstants(new double[]{7.967D, 3.221D, 3.512D, 3.359D, 0.000D, 0.417D, 9.103D, 0.000D, 5.671D});
+            }
+            PIDInitialized = true;
+            SendMessage("ResetSimulation");
         }
-        SendMessage("ResetSimulation");
     }
 
     void SetPIDConstants(double[] chromosome) {
@@ -36,13 +40,14 @@ public class HoverPID : MonoBehaviour {
         RollController = new PID(chromosome[3], chromosome[4], chromosome[5]);
         DisplacementPitchController = new PID(chromosome[6], chromosome[7], chromosome[8]);
         DisplacementRollController = new PID(chromosome[6], chromosome[7], chromosome[8]);
+        PIDInitialized = true;
     }
 
     public void InitialisePID(Tuple<int, Genome> data) {
         TrainingIndex = data.Item1;
         SetPIDConstants(data.Item2.GetChromosome());
         SendMessage("ResetSimulation");
-        reward = 0.0D;
+        Reward = 0.0F;
         CurrentStep = 0;
         SentEndSignal = false;
     }
@@ -64,24 +69,16 @@ public class HoverPID : MonoBehaviour {
         if(Vector3.Dot(Body.transform.up, Vector3.up) < 0) {
             measuredYaw = -Mathf.Atan2(Body.transform.forward.x, Body.transform.forward.z);
         }
-        double PositionControllerPitch = 0.1D * System.Math.Atan(DisplacementPitchController.ComputeOutput(0.0D, pitchDisplacement));//0.02D * System.Math.Atan(pitchDisplacement);
-        double PositionControllerRoll = 0.1D * System.Math.Atan(DisplacementRollController.ComputeOutput(0.0D, rollDisplacement));//0.02D * System.Math.Atan(rollDisplacement);
+        double PositionControllerPitch = 0.2D * Math.Tanh(DisplacementPitchController.ComputeOutput(0.0D, pitchDisplacement));
+        double PositionControllerRoll = 0.2D * Math.Tanh(DisplacementRollController.ComputeOutput(0.0D, rollDisplacement));
         double ThrustSignal = ThrustController.ComputeOutput(targetHeight, measuredHeight);
         double YawSignal = YawController.ComputeOutput(0.0D, measuredYaw);
         double PitchSignal = PitchController.ComputeOutput(PositionControllerPitch, measuredPitch);
         double RollSignal = RollController.ComputeOutput(PositionControllerRoll, measuredRoll);
-        MotorSignals[0] = ThrustSignal - YawSignal + PitchSignal - RollSignal;
-		MotorSignals[1] = ThrustSignal + YawSignal + PitchSignal + RollSignal;
-		MotorSignals[2] = ThrustSignal - YawSignal - PitchSignal + RollSignal;
-		MotorSignals[3] = ThrustSignal + YawSignal - PitchSignal - RollSignal;
-        for(int i = 0; i < 4; i++) {
-            if(MotorSignals[i] < -1.0D) {
-                MotorSignals[i] = -1.0D;
-            }
-            if(MotorSignals[i] > 1.0D) {
-                MotorSignals[i] = 1.0D;
-            }
-        }
+        MotorSignals[0] = Math.Tanh(ThrustSignal - YawSignal + PitchSignal - RollSignal);
+		MotorSignals[1] = Math.Tanh(ThrustSignal + YawSignal + PitchSignal + RollSignal);
+		MotorSignals[2] = Math.Tanh(ThrustSignal - YawSignal - PitchSignal + RollSignal);
+		MotorSignals[3] = Math.Tanh(ThrustSignal + YawSignal - PitchSignal - RollSignal);
         return MotorSignals;
     }
 
@@ -98,16 +95,24 @@ public class HoverPID : MonoBehaviour {
         CurrentStep += 1;
         Vector3 differenceVector = Target.transform.position - Body.transform.position;
 		float distance = differenceVector.magnitude;
-		float maxDistance = 14.0F;
+		float maxDistance = 10.0F;
 		float distancePower = 0.5F;
 		float spinImportance = 0.02F;
 		float distanceReward = Mathf.Max(0.0F, 1.0F - Mathf.Pow(distance / maxDistance, distancePower));
 		float spinPenalty = -spinImportance * Body.angularVelocity.magnitude;
-        reward += (distanceReward - spinPenalty) / Mathf.Max(1, MaxStep);
+        Reward += Mathf.Max(0.0F, (distanceReward + spinPenalty)) / Mathf.Max(1.0F, MaxStep);
         if(CurrentStep > MaxStep && Training && !SentEndSignal) {
-            //measure distance, Body.velocity.magnitude, Body.angularVelocity.magnitude and Vector3.Dot(Body.transform.up, Vector3.up)
-            Tuple<int, double> rewardData = new Tuple<int, double>(TrainingIndex, reward);
-            SendMessageUpwards("EpisodeEnded", rewardData);
+            float speed = Body.velocity.magnitude;
+            float angularSpeed = Body.angularVelocity.magnitude;
+            float yaw = Mathf.Atan2(Body.transform.right.z, Body.transform.right.x);
+			float pitch = Mathf.Atan2(Body.transform.forward.y, Body.transform.forward.z);
+			float roll = Mathf.Atan2(Body.transform.right.y, Body.transform.right.x);
+			if(Vector3.Dot(Body.transform.up, Vector3.up) < 0) {
+				yaw = -Mathf.Atan2(Body.transform.forward.x, Body.transform.forward.z);
+			}
+            float[] endValues = {Reward, distance, speed, angularSpeed, yaw, pitch, roll};
+            Tuple<int, float[]> endData = new Tuple<int, float[]>(TrainingIndex, endValues);
+            SendMessageUpwards("EpisodeEnded", endData);
             SentEndSignal = true;
         }
     }
