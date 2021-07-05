@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.unity.ide.vscode": "1.2.3",
-    "com.unity.ml-agents": "1.0.8",
+    "com.unity.ml-agents": "2.1.0-exp.1",
     "com.unity.toolchain.linux-x86_64": "0.1.18-preview",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",

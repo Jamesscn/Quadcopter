@@ -109,10 +109,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1457429520611778545}
-  - component: {fileID: 286426627012316945}
-  - component: {fileID: 7783525968018824828}
-  - component: {fileID: 2217748682116907830}
-  - component: {fileID: 1221001731648993555}
+  - component: {fileID: 2734464502559401072}
+  - component: {fileID: 1943983140714171719}
+  - component: {fileID: 6087477301232908993}
+  - component: {fileID: 1142956463323519888}
   m_Layer: 0
   m_Name: RLHoverQuad
   m_TagString: Untagged
@@ -139,7 +139,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &286426627012316945
+--- !u!114 &2734464502559401072
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -163,7 +163,7 @@ MonoBehaviour:
   - {x: 0.5, y: 0, z: -0.5}
   - {x: -0.5, y: 0, z: -0.5}
   RandomStart: 1
---- !u!114 &7783525968018824828
+--- !u!114 &1943983140714171719
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -182,21 +182,7 @@ MonoBehaviour:
   Body: {fileID: 2142205642498423854}
   MaxVoltage: 44.4
   Target: {fileID: 0}
---- !u!114 &2217748682116907830
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2265878792843806027}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DecisionPeriod: 1
-  TakeActionsBetweenDecisions: 1
---- !u!114 &1221001731648993555
+--- !u!114 &6087477301232908993
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -211,15 +197,35 @@ MonoBehaviour:
   m_BrainParameters:
     VectorObservationSize: 15
     NumStackedVectorObservations: 1
+    m_ActionSpec:
+      m_NumContinuousActions: 4
+      BranchSizes: 
     VectorActionSize: 04000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
-  m_Model: {fileID: 5022602860645237092, guid: adca816f5827378c6859588666f1e222, type: 3}
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: Quadcopter
   TeamId: 0
   m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_ObservableAttributeHandling: 0
+--- !u!114 &1142956463323519888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2265878792843806027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DecisionPeriod: 1
+  TakeActionsBetweenDecisions: 1
 --- !u!1 &6099363897765949230
 GameObject:
   m_ObjectHideFlags: 0

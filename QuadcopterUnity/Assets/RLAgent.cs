@@ -1,5 +1,6 @@
 using UnityEngine;
 using Unity.MLAgents;
+using Unity.MLAgents.Actuators;
 
 /**
 The RLAgent class is used mainly as a base class with helpful functions for the reinforcement learning agent scripts used for each of the tasks.
@@ -25,18 +26,19 @@ public class RLAgent : Agent {
 	}
 
 	//This function receives four output values from -1 to 1 from the reinforcement learning agent. This is rescaled to be between 0 and the largest voltage allowed, then sent to the Dynamics class.
-	public override void OnActionReceived(float[] vectorAction) {
+	public override void OnActionReceived(ActionBuffers actionBuffers) {
 		double[] voltages = new double[4];
 		for(int i = 0; i < 4; i++) {
-			voltages[i] = ScaleAction(vectorAction[i], 0, MaxVoltage);
+			voltages[i] = ScaleAction(actionBuffers.ContinuousActions[i], 0, MaxVoltage);
 		}
 		SendMessage("SetVoltages", voltages);
 	}
 
 	//This function is used to control the quadcopter whenever the reinforcement learning agent is not active.
-	public override void Heuristic(float[] actionsOut) {
+	public override void Heuristic(in ActionBuffers actionsOut) {
+		var continuousActionsOut = actionsOut.ContinuousActions;
 		for(int i = 0; i < 4; i++) {
-			actionsOut[i] = heuristicActions[i];
+			continuousActionsOut[i] = heuristicActions[i];
 		}
 	}
 
