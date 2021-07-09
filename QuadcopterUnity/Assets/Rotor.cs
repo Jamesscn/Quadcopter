@@ -38,10 +38,6 @@ public class Rotor {
 
 	//The following function simulates the changes in the rotor since the last time it was called. This is meant to be called at the frequency of the physics engine.
 	public void UpdateRotor(double InputVoltage) {
-		//The following condition stops the rotor if a negative voltage is given, because the quadcopter cannot fly in reverse.
-		if(InputVoltage < 0.0D) {
-			InputVoltage = 0.0D;
-		}
 		//Due to precision errors which can lead to undesirable results, Euler's method has to be used to calculate the change in the model since the previous time step. The number of steps taken by Euler's method is defined by EulerSteps.
 		//As a sidenote, decreasing the time step of the physics engine leads to slower training from the reinforcement learning agents, so this is done instead.
 		double DeltaTime = 0.0002D;

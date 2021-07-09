@@ -16,7 +16,7 @@ public class PIDTest : MonoBehaviour {
     double Position = 0.0D;
 
     void Start() {
-        Controller = new PID(4.0D, 3.0D, 1.0D);
+        Controller = new PID(4.0D, 3.0D, 1.0D, 0.0D, 44.4D);
         TestRotor = new Rotor();
         StartTime = Time.fixedTime;
     }
@@ -24,13 +24,13 @@ public class PIDTest : MonoBehaviour {
     void FixedUpdate() {
         //The following code simulates a step response and prints the time, input and output at each time step to the CSV file.
         double TimeElapsed = Time.fixedTime - StartTime;
-        if(TimeElapsed < 8.1D) {
+        if(TimeElapsed < 30.0D) {
             double Input = 0.0D;
             if(TimeElapsed > 0.1D) {
-                Input = 1.0D;
+                Input = 30.0D;
             }
             double Voltage = Controller.ComputeOutput(Input, Position);
-            TestRotor.UpdateRotor(Voltage);
+            TestRotor.UpdateRotor(Clamp(Voltage, 0.0D, 44.4D));
             double Force = TestRotor.LiftForce;
             double Mass = 0.75D;
             double Acceleration = Force / Mass - 9.81D;
@@ -47,5 +47,15 @@ public class PIDTest : MonoBehaviour {
                 Debug.Log("Wrote to file");
             }
         }
+    }
+
+    double Clamp(double value, double min, double max) {
+        if(value < min) {
+            value = min;
+        }
+        if(value > max) {
+            value = max;
+        }
+        return value;
     }
 }

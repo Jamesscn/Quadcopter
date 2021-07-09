@@ -75,7 +75,7 @@ public class Genome : IComparable {
         Genome mutated = new Genome();
         for(int i = 0; i < original.GetGenes(); i++) {
             if(RandomGenerator.NextDouble() < mutationProbability) {
-                double shiftAmount = RandomGenerator.NextDouble() - 0.5D;
+                double shiftAmount = (MaxValue - MinValue) * 0.1D * (RandomGenerator.NextDouble() - 0.5D);
                 double newAlelle = original.GetChromosome()[i] + shiftAmount;
                 if(newAlelle < MinValue) {
                     newAlelle = MinValue;

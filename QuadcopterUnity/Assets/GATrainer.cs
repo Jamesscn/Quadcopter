@@ -11,6 +11,7 @@ public class GATrainer : MonoBehaviour {
     public float Separation;
     public double SurvivalProportion;
     public double MutationProbability;
+    public bool QuickTimescale;
 
     int EpisodesCompleted;
     float BestEpisodeFitness;
@@ -23,8 +24,10 @@ public class GATrainer : MonoBehaviour {
     GameObject[] TrainingAreas;
 
     void Start() {
-        Time.timeScale = 100;
-        PIDTrainer = new GeneticAlgorithm(Instances, 9, 0.0D, 10.0D, SurvivalProportion, MutationProbability);
+        if(QuickTimescale) {
+            Time.timeScale = 100;
+        }
+        PIDTrainer = new GeneticAlgorithm(Instances, 9, 0.0D, 0.1D, SurvivalProportion, MutationProbability);
         EpisodesCompleted = 0;
         BestEpisodeFitness = 0.0F;
         LoggedFittestData = new List<float[]>();
@@ -83,7 +86,7 @@ public class GATrainer : MonoBehaviour {
         string TXTOutput = "";
         double[] BestValues = PIDTrainer.GetFittest().GetChromosome();
         for(int i = 0; i < BestValues.Length; i++) {
-            TXTOutput += String.Format("{0:0.000}", BestValues[i]);
+            TXTOutput += String.Format("{0:0.00000}", BestValues[i]);
             if(i != BestValues.Length - 1) {
                 TXTOutput += ", ";
             }
