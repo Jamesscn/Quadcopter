@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3912015, g: 0.36495844, b: 0.23849016, a: 1}
+  m_IndirectSpecularColor: {r: 0.14687042, g: 0.2752775, b: 0.25896415, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -214,7 +214,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &385670681
 GameObject:
@@ -297,7 +297,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 20, y: 0, z: 0}
 --- !u!1 &1173239334
 GameObject:
@@ -315,7 +315,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1173239335
 Transform:
   m_ObjectHideFlags: 0
@@ -347,83 +347,3 @@ MonoBehaviour:
   Instances: 1024
   Rows: 16
   Separation: 16
---- !u!1001 &1452156582
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2897816145596205992, guid: 8ab68892a2e0153479ef296749cbb151,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2897816145596205992, guid: 8ab68892a2e0153479ef296749cbb151,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2897816145596205992, guid: 8ab68892a2e0153479ef296749cbb151,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2897816145596205992, guid: 8ab68892a2e0153479ef296749cbb151,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2897816145596205992, guid: 8ab68892a2e0153479ef296749cbb151,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2897816145596205992, guid: 8ab68892a2e0153479ef296749cbb151,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2897816145596205992, guid: 8ab68892a2e0153479ef296749cbb151,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2897816145596205992, guid: 8ab68892a2e0153479ef296749cbb151,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2897816145596205992, guid: 8ab68892a2e0153479ef296749cbb151,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2897816145596205992, guid: 8ab68892a2e0153479ef296749cbb151,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2897816145596205992, guid: 8ab68892a2e0153479ef296749cbb151,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2897816145596205993, guid: 8ab68892a2e0153479ef296749cbb151,
-        type: 3}
-      propertyPath: m_Name
-      value: RLHoverArea
-      objectReference: {fileID: 0}
-    - target: {fileID: 2897816145596205993, guid: 8ab68892a2e0153479ef296749cbb151,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4428878176888405385, guid: 8ab68892a2e0153479ef296749cbb151,
-        type: 3}
-      propertyPath: m_Model
-      value: 
-      objectReference: {fileID: 5022602860645237092, guid: 163234ecdbc4c2939abdf79c7c8339b7,
-        type: 3}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 8ab68892a2e0153479ef296749cbb151, type: 3}

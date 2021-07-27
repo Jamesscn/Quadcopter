@@ -32,20 +32,22 @@ public class HoverAgent : RLAgent {
 
 	void FixedUpdate() {
 		Vector3 differenceVector = Target.transform.position - Body.transform.position;
+		float yaw = Mathf.Atan2(Body.transform.right.z, Body.transform.right.x);
+		float pitch = Mathf.Atan2(Body.transform.forward.y, Body.transform.forward.z);
+		float roll = Mathf.Atan2(Body.transform.right.y, Body.transform.right.x);
+		if(Vector3.Dot(Body.transform.up, Vector3.up) < 0) {
+			yaw = -Mathf.Atan2(Body.transform.forward.x, Body.transform.forward.z);
+		}
 		float distance = differenceVector.magnitude;
 		float maxDistance = 10.0F;
 		float distancePower = 0.5F;
 		float spinImportance = 0.02F;
+		float angleImportance = 0.02F;
 		float distanceReward = Mathf.Max(0.0F, 1.0F - Mathf.Pow(distance / maxDistance, distancePower));
 		float spinPenalty = -spinImportance * Body.angularVelocity.magnitude;
-		AddReward(Mathf.Max(0.0F, (distanceReward + spinPenalty)) / Mathf.Max(1.0F, MaxStep));
+		float anglePenalty = -angleImportance * Mathf.Abs(yaw);
+		AddReward(Mathf.Max(0.0F, (distanceReward + spinPenalty + anglePenalty)) / Mathf.Max(1.0F, MaxStep));
 		if(StepCount == MaxStep - 1 || distance > maxDistance || Vector3.Dot(Body.transform.up, Vector3.up) < 0) {
-			float yaw = Mathf.Atan2(Body.transform.right.z, Body.transform.right.x);
-			float pitch = Mathf.Atan2(Body.transform.forward.y, Body.transform.forward.z);
-			float roll = Mathf.Atan2(Body.transform.right.y, Body.transform.right.x);
-			if(Vector3.Dot(Body.transform.up, Vector3.up) < 0) {
-				yaw = -Mathf.Atan2(Body.transform.forward.x, Body.transform.forward.z);
-			}
 			Academy.Instance.StatsRecorder.Add("Final Distance", distance, StatAggregationMethod.Average);
 			Academy.Instance.StatsRecorder.Add("Final Speed", Body.velocity.magnitude, StatAggregationMethod.Average);
 			Academy.Instance.StatsRecorder.Add("Final Angular Speed", Body.angularVelocity.magnitude, StatAggregationMethod.Average);

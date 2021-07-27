@@ -1,4 +1,5 @@
 using System;
+using static StaticFunctions;
 
 public class Genome : IComparable {
 
@@ -77,12 +78,7 @@ public class Genome : IComparable {
             if(RandomGenerator.NextDouble() < mutationProbability) {
                 double shiftAmount = (MaxValue - MinValue) * 0.1D * (RandomGenerator.NextDouble() - 0.5D);
                 double newAlelle = original.GetChromosome()[i] + shiftAmount;
-                if(newAlelle < MinValue) {
-                    newAlelle = MinValue;
-                }
-                if(newAlelle > MaxValue) {
-                    newAlelle = MaxValue;
-                }
+                newAlelle = Clamp(newAlelle, MinValue, MaxValue);
                 mutated.SetAlelle(i, newAlelle);
             } else {
                 mutated.SetAlelle(i, original.GetChromosome()[i]);

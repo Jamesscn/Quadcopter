@@ -12,6 +12,8 @@ public class Dynamics : MonoBehaviour {
 	public GameObject[] RotorObjects;
 	public Vector3[] RotorPositions;
 	public bool RandomStart;
+	public bool PIDStart;
+	public bool ShowForces;
 	Rotor[] Rotors = {
 		new Rotor(),
 		new Rotor(),
@@ -39,8 +41,13 @@ public class Dynamics : MonoBehaviour {
 			Body.transform.localRotation = Quaternion.Euler(InitialPitch, InitialYaw, InitialRoll);
 			Body.transform.localPosition = UnityEngine.Random.insideUnitSphere * 5.0F;
 		} else {
-			Body.transform.localRotation = Quaternion.Euler(45, 90, -45);
-			Body.transform.localPosition = new Vector3(1, 1, 1).normalized * 5.0F;
+			if(PIDStart) {
+				Body.transform.localRotation = Quaternion.Euler(45, 90, -45);
+				Body.transform.localPosition = new Vector3(1, 1, 1).normalized * 5.0F;
+			} else {
+				Body.transform.localRotation = Quaternion.identity;
+				Body.transform.localPosition = Vector3.zero;
+			}
 		}
 		MotorVoltages = new double[] {0.0D, 0.0D, 0.0D, 0.0D};
 		Body.gameObject.SetActive(false);
@@ -86,15 +93,17 @@ public class Dynamics : MonoBehaviour {
 
 	//The following function is used to show the forces and yaw torque while debugging.
 	void OnDrawGizmos() {
-		Gizmos.color = Color.red;
-		double YawTorque = 0.0D;
-		for(int i = 0; i < 4; i++) {
-			Vector3 WorldRotorPosition = Body.transform.TransformPoint(RotorPositions[i]);
-			YawTorque += TorqueDirections[i] * Rotors[i].NetTorque;			
-			Gizmos.DrawRay(WorldRotorPosition, (float)(GizmoScale * Rotors[i].LiftForce) * Body.transform.up);
+		if(ShowForces) {
+			Gizmos.color = Color.red;
+			double YawTorque = 0.0D;
+			for(int i = 0; i < 4; i++) {
+				Vector3 WorldRotorPosition = Body.transform.TransformPoint(RotorPositions[i]);
+				YawTorque += TorqueDirections[i] * Rotors[i].NetTorque;			
+				Gizmos.DrawRay(WorldRotorPosition, (float)(GizmoScale * Rotors[i].LiftForce) * Body.transform.up);
+			}
+			Gizmos.color = Color.green;
+			Gizmos.DrawRay(Body.transform.position, (float)(GizmoScale * YawTorque) * Body.transform.up);
 		}
-		Gizmos.color = Color.green;
-		Gizmos.DrawRay(Body.transform.position, (float)(GizmoScale * YawTorque) * Body.transform.up);
 	}
 
 }

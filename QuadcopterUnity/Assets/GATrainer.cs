@@ -11,6 +11,8 @@ public class GATrainer : MonoBehaviour {
     public float Separation;
     public double SurvivalProportion;
     public double MutationProbability;
+    public double MaxPIDValue;
+    public string TaskName;
     public bool QuickTimescale;
 
     int EpisodesCompleted;
@@ -27,7 +29,7 @@ public class GATrainer : MonoBehaviour {
         if(QuickTimescale) {
             Time.timeScale = 100;
         }
-        PIDTrainer = new GeneticAlgorithm(Instances, 9, 0.0D, 0.1D, SurvivalProportion, MutationProbability);
+        PIDTrainer = new GeneticAlgorithm(Instances, 9, 0.0D, MaxPIDValue, SurvivalProportion, MutationProbability);
         EpisodesCompleted = 0;
         BestEpisodeFitness = 0.0F;
         LoggedFittestData = new List<float[]>();
@@ -80,7 +82,7 @@ public class GATrainer : MonoBehaviour {
             } 
             CSVOutput += "\n";
         }
-        StreamWriter Writer = new StreamWriter("results/HoverPID/TrainingData.csv", false);
+        StreamWriter Writer = new StreamWriter("results/" + TaskName + "PID/TrainingData.csv", false);
         Writer.Write(CSVOutput);
         Writer.Close();
         string TXTOutput = "";
@@ -91,7 +93,7 @@ public class GATrainer : MonoBehaviour {
                 TXTOutput += ", ";
             }
         }
-        Writer = new StreamWriter("results/HoverPID/Parameters.txt", false);
+        Writer = new StreamWriter("results/" + TaskName + "PID/Parameters.txt", false);
         Writer.Write(TXTOutput);
         Writer.Close();
         Debug.Log("Wrote PID data to file");
