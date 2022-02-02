@@ -7,14 +7,17 @@ public class Genome : IComparable {
     static double MinValue, MaxValue;
     static int Genes;
 
-    double Fitness;
     double[] Chromosome;
+    float[] Data;
+    float Fitness;
 
     public Genome(int genes, double min, double max, Random randomGenerator) {
         RandomGenerator = randomGenerator;
         Genes = genes;
         MinValue = min;
         MaxValue = max;
+        Fitness = 0.0F;
+        Data = new float[7];
         Chromosome = new double[Genes];
         for(int i = 0; i < genes; i++) {
             Chromosome[i] = GetRandomAlelle();
@@ -22,6 +25,8 @@ public class Genome : IComparable {
     }
 
     public Genome() {
+        Fitness = 0.0F;
+        Data = new float[7];
         Chromosome = new double[Genes];
     }
 
@@ -37,12 +42,32 @@ public class Genome : IComparable {
         Chromosome[gene] = alelle;
     }
 
-    public void SetFitness(double fitness) {
-        Fitness = fitness;
+    public void AddFitness(float fitness) {
+        Fitness += fitness;
     }
 
-    public double GetFitness() {
+    public void ResetFitness() {
+        Fitness = 0.0F;
+    }
+
+    public float GetFitness() {
         return Fitness;
+    }
+
+    public void AggregateData(float[] data) {
+        for(int i = 0; i < 7; i++) {
+            Data[i] += data[i];
+        }
+    }
+
+    public void ResetData() {
+        for(int i = 0; i < 7; i++) {
+            Data[i] = 0.0F;
+        }
+    }
+
+    public float[] GetData() {
+        return Data;
     }
 
     public int CompareTo(object obj) {
@@ -125,8 +150,12 @@ public class GeneticAlgorithm {
         return Population[index];
     }
 
-    public void SetFitness(int index, double fitness) {
-        Population[index].SetFitness(fitness);
+    public void AddFitness(int index, float fitness) {
+        Population[index].AddFitness(fitness);
+    }
+
+    public void AggregateData(int index, float[] data) {
+        Population[index].AggregateData(data);
     }
 
     Tuple<Genome, Genome> SelectRandomParents(double[] selectionProbabilities) {
@@ -149,8 +178,14 @@ public class GeneticAlgorithm {
         return new Tuple<Genome, Genome>(firstParent, secondParent);
     }
 
-    public void Evolve() {
+    public Tuple<float, float[]> Evolve() {
         Array.Sort(Population);
+        float bestFitness = Population[0].GetFitness();
+        float[] bestData = new float[7];
+        for(int i = 0; i < 7; i++) {
+            bestData[i] = Population[0].GetData()[i];
+        }
+        Tuple<float, float[]> returnData = new Tuple<float, float[]>(bestFitness, bestData);
         Genome[] NextGeneration = new Genome[PopulationSize];
         int currentPopulationSize = 0;
         for(int i = 0; i < PopulationSize * SurvivalProportion; i++) {
@@ -184,6 +219,11 @@ public class GeneticAlgorithm {
             currentPopulationSize++;
         }
         Population = NextGeneration;
+        for(int i = 0; i < PopulationSize; i++) {
+            Population[i].ResetFitness();
+            Population[i].ResetData();
+        }
+        return returnData;
     }
 
     public Genome GetFittest() {

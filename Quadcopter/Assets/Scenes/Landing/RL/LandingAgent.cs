@@ -6,7 +6,9 @@ using Unity.MLAgents.Actuators;
 public class LandingAgent : RLAgent {
 
 	public GameObject Ground;
+	public bool ShowTrajectory;
     bool StopMovement = false;
+	Vector3[] Locations = new Vector3[500];
 
     public override void OnActionReceived(ActionBuffers actionBuffers) {
 		double[] voltages = new double[4];
@@ -52,22 +54,21 @@ public class LandingAgent : RLAgent {
 		if(Vector3.Dot(Body.transform.up, Vector3.up) < 0) {
 			yaw = -Mathf.Atan2(Body.transform.forward.x, Body.transform.forward.z);
 		}
+        float distance = differenceVector.magnitude;
         float speed = Body.velocity.magnitude;
-		float distance = differenceVector.magnitude;
-		float maxDistance = 10.0F;
-		float distancePower = 0.5F;
-		float speedImportance = 0.01F;
-		float spinImportance = 0.01F;
-        float angleImportance = 0.01F;
-		float distanceReward = Mathf.Max(0.0F, 1.0F - Mathf.Pow(distance / maxDistance, distancePower));
-		float speedPenalty = -speedImportance * speed;
-        float spinPenalty = -spinImportance * Body.angularVelocity.magnitude;
-        float anglePenalty = -angleImportance * Mathf.Abs(yaw);
-        AddReward(Mathf.Max(0.0F, (distanceReward + speedPenalty + spinPenalty + anglePenalty)) / Mathf.Max(1.0F, MaxStep));
-		if(StepCount == MaxStep - 1 || distance > maxDistance || Vector3.Dot(Body.transform.up, Vector3.up) < 0 || differenceVector.y > 0) {
-            Academy.Instance.StatsRecorder.Add("Final Distance", distance, StatAggregationMethod.Average);
-			Academy.Instance.StatsRecorder.Add("Final Speed", Body.velocity.magnitude, StatAggregationMethod.Average);
-			Academy.Instance.StatsRecorder.Add("Final Angular Speed", Body.angularVelocity.magnitude, StatAggregationMethod.Average);
+        float angularSpeed = Body.angularVelocity.magnitude;
+		float DeltaReward = Mathf.Exp(- 0.4F * Mathf.Pow(distance, 0.8F)
+                            - 1.0F * Mathf.Pow(Mathf.Abs(yaw), 1.4F)
+                            - 0.8F * Mathf.Pow(angularSpeed, 1.2F)
+                            - 1.1F * Mathf.Pow(speed, 0.7F)) / Mathf.Max(1.0F, MaxStep);
+        AddReward(DeltaReward);
+		if(StepCount == MaxStep - 1 || differenceVector.y > 0 || Vector3.Dot(Body.transform.up, Vector3.up) < 0) {
+			if(differenceVector.y > 0) {
+				AddReward((MaxStep - StepCount - 1) * DeltaReward);
+			}
+			Academy.Instance.StatsRecorder.Add("Final Distance", distance, StatAggregationMethod.Average);
+			Academy.Instance.StatsRecorder.Add("Final Speed", speed, StatAggregationMethod.Average);
+			Academy.Instance.StatsRecorder.Add("Final Angular Speed", angularSpeed, StatAggregationMethod.Average);
 			Academy.Instance.StatsRecorder.Add("Final Yaw", yaw);
 			Academy.Instance.StatsRecorder.Add("Final Pitch", pitch);
 			Academy.Instance.StatsRecorder.Add("Final Roll", roll);
@@ -78,5 +79,17 @@ public class LandingAgent : RLAgent {
     public void Collision() {
         StopMovement = true;
     }
+
+	void OnDrawGizmos() {
+		/*
+        Locations[StepCount - 1] = Body.transform.position;
+        if(ShowTrajectory && StepCount > 1) {
+            Gizmos.color = Color.black;
+            for(int i = 1; i < StepCount; i++) {
+                Gizmos.DrawRay(Locations[i - 1], Locations[i] - Locations[i - 1]);
+            }
+        }
+        */
+	}
 	
 }

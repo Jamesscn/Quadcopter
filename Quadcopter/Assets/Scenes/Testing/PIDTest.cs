@@ -24,7 +24,7 @@ public class PIDTest : MonoBehaviour {
     void FixedUpdate() {
         //The following code simulates a step response and prints the time, input and output at each time step to the CSV file.
         double TimeElapsed = Time.fixedTime - StartTime;
-        if(TimeElapsed < 30.0D) {
+        if(TimeElapsed < 20.0D) {
             double Input = 0.0D;
             if(TimeElapsed > 0.1D) {
                 Input = 30.0D;

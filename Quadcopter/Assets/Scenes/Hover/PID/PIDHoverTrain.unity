@@ -253,8 +253,7 @@ MonoBehaviour:
   Separation: 8
   SurvivalProportion: 0.4
   MutationProbability: 0.2
-  MaxPIDValue: 0.5
-  TaskName: Hover
+  MaxPIDValue: 1
   QuickTimescale: 1
 --- !u!4 &797152763
 Transform:

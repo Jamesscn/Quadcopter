@@ -1,0 +1,65 @@
+{
+    "Quadcopter": {
+        "checkpoints": [
+            {
+                "steps": 134999931,
+                "file_path": "results/RLHover/Quadcopter/Quadcopter-134999931.onnx",
+                "reward": 0.43949116707358715,
+                "creation_time": 1629951043.7355988,
+                "auxillary_file_paths": [
+                    "results/RLHover/Quadcopter/Quadcopter-134999931.pt"
+                ]
+            },
+            {
+                "steps": 139999789,
+                "file_path": "results/RLHover/Quadcopter/Quadcopter-139999789.onnx",
+                "reward": 0.4561724175846642,
+                "creation_time": 1629961274.1217558,
+                "auxillary_file_paths": [
+                    "results/RLHover/Quadcopter/Quadcopter-139999789.pt"
+                ]
+            },
+            {
+                "steps": 144999652,
+                "file_path": "results/RLHover/Quadcopter/Quadcopter-144999652.onnx",
+                "reward": 0.4604307260455155,
+                "creation_time": 1629971690.5452917,
+                "auxillary_file_paths": [
+                    "results/RLHover/Quadcopter/Quadcopter-144999652.pt"
+                ]
+            },
+            {
+                "steps": 149999710,
+                "file_path": "results/RLHover/Quadcopter/Quadcopter-149999710.onnx",
+                "reward": 0.46323774920569527,
+                "creation_time": 1629982110.9789715,
+                "auxillary_file_paths": [
+                    "results/RLHover/Quadcopter/Quadcopter-149999710.pt"
+                ]
+            },
+            {
+                "steps": 150001207,
+                "file_path": "results/RLHover/Quadcopter/Quadcopter-150001207.onnx",
+                "reward": 0.46219559212525685,
+                "creation_time": 1629982111.3390474,
+                "auxillary_file_paths": [
+                    "results/RLHover/Quadcopter/Quadcopter-150001207.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 150001207,
+            "file_path": "results/RLHover/Quadcopter.onnx",
+            "reward": 0.46219559212525685,
+            "creation_time": 1629982111.3390474,
+            "auxillary_file_paths": [
+                "results/RLHover/Quadcopter/Quadcopter-150001207.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.27.0",
+        "torch_version": "1.8.1+cu102"
+    }
+}

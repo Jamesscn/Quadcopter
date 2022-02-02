@@ -27,7 +27,7 @@ public class GATest : MonoBehaviour {
                 }
             }
             Debug.Log(chromosomeString + " - FITNESS: " + string.Format("{0:0.00}", fitness));
-            GA.SetFitness(i, fitness);
+            //GA.SetFitness(i, fitness);
         }
         Debug.Log("Evolving");
         GA.Evolve();
@@ -46,7 +46,7 @@ public class GATest : MonoBehaviour {
                 }
             }
             Debug.Log(chromosomeString + " - FITNESS: " + string.Format("{0:0.00}", fitness));
-            GA.SetFitness(i, fitness);
+            //GA.SetFitness(i, fitness);
         }
         Debug.Log("Evolution has occurred");
     }

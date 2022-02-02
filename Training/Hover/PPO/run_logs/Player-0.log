@@ -1,0 +1,82 @@
+Mono path[0] = '/home/js20164/RLHover/TrainingExecutable_Data/Managed'
+Mono config path = '/home/js20164/RLHover/TrainingExecutable_Data/MonoBleedingEdge/etc'
+Preloaded 'lib_burst_generated.so'
+Preloaded 'libgrpc_csharp_ext.x64.so'
+Initialize engine version: 2020.3.8f1 (507919d4fff5)
+[Subsystems] Discovering subsystems at path /home/js20164/RLHover/TrainingExecutable_Data/UnitySubsystems
+Forcing GfxDevice: Null
+GfxDevice: creating device client; threaded=0
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+Begin MonoManager ReloadAssembly
+- Completed reload, in  0.328 seconds
+ERROR: Shader Sprites/Default shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Sprites/Mask shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Legacy Shaders/VertexLit shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Standard' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Standard shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Standard' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+UnloadTime: 0.956469 ms
+Fallback handler could not load library /home/js20164/RLHover/TrainingExecutable_Data/Mono/libcoreclr.so
+Fallback handler could not load library /home/js20164/RLHover/TrainingExecutable_Data/Mono/libcoreclr.so
+Fallback handler could not load library /home/js20164/RLHover/TrainingExecutable_Data/Mono/libcoreclr.so
+Fallback handler could not load library /home/js20164/RLHover/TrainingExecutable_Data/Mono/libSystem.dylib
+Fallback handler could not load library /home/js20164/RLHover/TrainingExecutable_Data/Mono/libSystem.dylib.so
+Fallback handler could not load library /home/js20164/RLHover/TrainingExecutable_Data/Mono/libSystem.dylib
+Fallback handler could not load library /home/js20164/RLHover/TrainingExecutable_Data/Mono/libcoreclr.so
+Fallback handler could not load library /home/js20164/RLHover/TrainingExecutable_Data/Mono/libcoreclr.so
+Fallback handler could not load library /home/js20164/RLHover/TrainingExecutable_Data/Mono/libcoreclr.so
+Fallback handler could not load library /home/js20164/RLHover/TrainingExecutable_Data/Mono/libSystem.dylib
+Fallback handler could not load library /home/js20164/RLHover/TrainingExecutable_Data/Mono/libSystem.dylib.so
+Fallback handler could not load library /home/js20164/RLHover/TrainingExecutable_Data/Mono/libSystem.dylib
+Setting up 44 worker threads for Enlighten.
+  Thread -> id: 2b6ddce9f700 -> priority: 1 
+  Thread -> id: 2b6ddd0a0700 -> priority: 1 
+  Thread -> id: 2b6ddd2a1700 -> priority: 1 
+  Thread -> id: 2b6ddd4a2700 -> priority: 1 
+  Thread -> id: 2b6ddd8a4700 -> priority: 1 
+  Thread -> id: 2b6ddd6a3700 -> priority: 1 
+  Thread -> id: 2b6dddaa5700 -> priority: 1 
+  Thread -> id: 2b6dddca6700 -> priority: 1 
+  Thread -> id: 2b6dddea7700 -> priority: 1 
+  Thread -> id: 2b6dde0a8700 -> priority: 1 
+  Thread -> id: 2b6dde2a9700 -> priority: 1 
+  Thread -> id: 2b6dde4aa700 -> priority: 1 
+  Thread -> id: 2b6dde6ab700 -> priority: 1 
+  Thread -> id: 2b6dde8ac700 -> priority: 1 
+  Thread -> id: 2b6ddeaad700 -> priority: 1 
+  Thread -> id: 2b6ddecae700 -> priority: 1 
+  Thread -> id: 2b6ddeeaf700 -> priority: 1 
+  Thread -> id: 2b6ddf0b0700 -> priority: 1 
+  Thread -> id: 2b6ddf2b1700 -> priority: 1 
+  Thread -> id: 2b6ddf4b2700 -> priority: 1 
+  Thread -> id: 2b6ddf6b3700 -> priority: 1 
+  Thread -> id: 2b6ddf8b4700 -> priority: 1 
+  Thread -> id: 2b6ddfab5700 -> priority: 1 
+  Thread -> id: 2b6ddfcb6700 -> priority: 1 
+  Thread -> id: 2b6ddfeb7700 -> priority: 1 
+  Thread -> id: 2b6de8200700 -> priority: 1 
+  Thread -> id: 2b6de8401700 -> priority: 1 
+  Thread -> id: 2b6de8602700 -> priority: 1 
+  Thread -> id: 2b6de8803700 -> priority: 1 
+  Thread -> id: 2b6de8a04700 -> priority: 1 
+  Thread -> id: 2b6de8c05700 -> priority: 1 
+  Thread -> id: 2b6de8e06700 -> priority: 1 
+  Thread -> id: 2b6de9007700 -> priority: 1 
+  Thread -> id: 2b6de9208700 -> priority: 1 
+  Thread -> id: 2b6de9409700 -> priority: 1 
+  Thread -> id: 2b6de960a700 -> priority: 1 
+  Thread -> id: 2b6de980b700 -> priority: 1 
+  Thread -> id: 2b6de9a0c700 -> priority: 1 
+  Thread -> id: 2b6de9c0d700 -> priority: 1 
+  Thread -> id: 2b6de9e0e700 -> priority: 1 
+  Thread -> id: 2b6dea00f700 -> priority: 1 
+  Thread -> id: 2b6dea210700 -> priority: 1 
+  Thread -> id: 2b6dea411700 -> priority: 1 
+  Thread -> id: 2b6dea612700 -> priority: 1 

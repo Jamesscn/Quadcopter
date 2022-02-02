@@ -9,8 +9,8 @@ public class PathPID : MonoBehaviour {
     public int MaxStep;
     public double MaxVoltage;
     public double NoiseStrength;
-    public double LoopsPerIteration;
     public bool ShowPath;
+    public bool ShowTrajectory;
     public bool Training;
 
     bool SentEndSignal;
@@ -18,6 +18,10 @@ public class PathPID : MonoBehaviour {
     int StepCount = 0;
     float Reward = 0.0F;
     bool PIDInitialized = false;
+    float a = 1.0F;
+    float b = 0.0F;
+    float c = 0.0F;
+	Vector3[] Locations = new Vector3[500];
 
     PID ThrustController;
     PID YawController;
@@ -28,11 +32,16 @@ public class PathPID : MonoBehaviour {
 
     public void Start() {
         if(!PIDInitialized) {
+            a = UnityEngine.Random.Range(0.0F, Mathf.PI / 2.0F);
+            b = UnityEngine.Random.Range(Mathf.PI / 4.0F, 3.0F * Mathf.PI / 4.0F);
+            c = UnityEngine.Random.Range(-1.0F, 1.0F);
             SetPIDConstants(new double[]{0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D});
             if(!Training) {
-                SetPIDConstants(new double[]{0.75000D, 0.49403D, 0.06824D, 0.04998D, 0.07458D, 0.05006D, 0.00863D, 0.01962D, 0.73290D});
+                SetPIDConstants(new double[]{0.42898D, 0.27482D, 0.20639D, 0.11335D, 0.01156D, 0.04488D, 0.05784D, 0.01122D, 0.28169D});
             }
             PIDInitialized = true;
+            Body.transform.localRotation = Quaternion.identity;
+            Body.transform.localPosition = PathFunction(0.0F);
             SendMessage("ResetSimulation");
         }
     }
@@ -50,10 +59,15 @@ public class PathPID : MonoBehaviour {
     public void InitialisePID(Tuple<int, Genome> data) {
         TrainingIndex = data.Item1;
         SetPIDConstants(data.Item2.GetChromosome());
+        Body.transform.localRotation = Quaternion.identity;
+        Body.transform.localPosition = PathFunction(0.0F);
         SendMessage("ResetSimulation");
         Reward = 0.0F;
         StepCount = 0;
         SentEndSignal = false;
+        a = UnityEngine.Random.Range(0.0F, Mathf.PI / 2.0F);
+        b = UnityEngine.Random.Range(-1.0F, 1.0F);
+        c = UnityEngine.Random.Range(Mathf.PI / 4.0F, 3.0F * Mathf.PI / 4.0F);
     }
 
     double[] Controller() {
@@ -91,11 +105,9 @@ public class PathPID : MonoBehaviour {
 	}
 
     public void FixedUpdate() {
-        float time = 2 * Mathf.PI * (float)LoopsPerIteration * StepCount / MaxStep;
-        Target.transform.localPosition = 5.0F * new Vector3(Mathf.Sin(time), Mathf.Sin(time), Mathf.Sin(time) * Mathf.Cos(time));
-
-        SendActions(Controller());
         StepCount += 1;
+        Target.transform.localPosition = PathFunction((float)(StepCount % 500) / MaxStep);
+        SendActions(Controller());
         Vector3 differenceVector = Target.transform.position - Body.transform.position;
         float yaw = Mathf.Atan2(Body.transform.right.z, Body.transform.right.x);
         float pitch = Mathf.Atan2(Body.transform.forward.y, Body.transform.forward.z);
@@ -104,17 +116,12 @@ public class PathPID : MonoBehaviour {
             yaw = -Mathf.Atan2(Body.transform.forward.x, Body.transform.forward.z);
         }
 		float distance = differenceVector.magnitude;
-		float maxDistance = 10.0F;
-		float distancePower = 0.5F;
-		float spinImportance = 0.02F;
-        float angleImportance = 0.02F;
-		float distanceReward = Mathf.Max(0.0F, 1.0F - Mathf.Pow(distance / maxDistance, distancePower));
-		float spinPenalty = -spinImportance * Body.angularVelocity.magnitude;
-        float anglePenalty = -angleImportance * Mathf.Abs(yaw);
-        Reward += Mathf.Max(0.0F, (distanceReward + spinPenalty + anglePenalty)) / Mathf.Max(1.0F, MaxStep);
-        if(StepCount > MaxStep && Training && !SentEndSignal) {
-            float speed = Body.velocity.magnitude;
-            float angularSpeed = Body.angularVelocity.magnitude;
+        float speed = Body.velocity.magnitude;
+        float angularSpeed = Body.angularVelocity.magnitude;
+		Reward += Mathf.Exp(- 0.4F * Mathf.Pow(distance, 0.8F)
+                            - 1.0F * Mathf.Pow(Mathf.Abs(yaw), 1.4F)
+                            - 0.8F * Mathf.Pow(angularSpeed, 1.2F)) / Mathf.Max(1.0F, MaxStep);
+        if(StepCount == MaxStep - 1 && Training && !SentEndSignal) {
             float[] endValues = {Reward, distance, speed, angularSpeed, yaw, pitch, roll};
             Tuple<int, float[]> endData = new Tuple<int, float[]>(TrainingIndex, endValues);
             SendMessageUpwards("EpisodeEnded", endData);
@@ -123,19 +130,42 @@ public class PathPID : MonoBehaviour {
     }
 
     void OnDrawGizmos() {
-        if(ShowPath) {
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay(Body.transform.position, Target.transform.position - Body.transform.position);
+        /*
+        Locations[StepCount - 1] = Body.transform.position;
+        if(ShowTrajectory && StepCount > 1) {
             Gizmos.color = Color.black;
+            for(int i = 1; i < StepCount; i++) {
+                Gizmos.DrawRay(Locations[i - 1], Locations[i] - Locations[i - 1]);
+                if(i % 10 == 0) {
+                    float time = (float)i / MaxStep;
+                    Gizmos.color = Color.blue;
+                    Gizmos.DrawRay(Locations[i], transform.position + PathFunction(time) - Locations[i]);
+                    Gizmos.color = Color.black;
+                }
+            }
+        }
+        */
+        if(ShowPath) {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawRay(Body.transform.position, Target.transform.position - Body.transform.position);
+            Gizmos.color = Color.red;
             int DrawSteps = 100;
             for(int i = 0; i < DrawSteps; i++) {
-                float currTime = 2 * Mathf.PI * (float)LoopsPerIteration * i / DrawSteps;
-                float nextTime = 2 * Mathf.PI * (float)LoopsPerIteration * (i + 1) / DrawSteps;
-                Vector3 currPos = 5.0F * new Vector3(Mathf.Sin(currTime), Mathf.Sin(currTime), Mathf.Sin(currTime) * Mathf.Cos(currTime));
-                Vector3 nextPos = 5.0F * new Vector3(Mathf.Sin(nextTime), Mathf.Sin(nextTime), Mathf.Sin(nextTime) * Mathf.Cos(nextTime));
+                float currTime = (float)i / DrawSteps;
+                float nextTime = (float)(i + 1) / DrawSteps;
+                Vector3 currPos = transform.position + PathFunction(currTime);
+                Vector3 nextPos = transform.position + PathFunction(nextTime);
                 Gizmos.DrawRay(currPos, nextPos - currPos);
             }
         }
 	}
+
+    public Vector3 PathFunction(float time) {
+        time = time - (int)time;
+        return 5.0F * new Vector3(
+            Mathf.Cos(2 * Mathf.PI * time + a),
+            b * Mathf.Min(time, 1 - time),
+            Mathf.Cos(2 * Mathf.PI * time) * Mathf.Cos(2 * Mathf.PI * time + c));
+    }
 
 }

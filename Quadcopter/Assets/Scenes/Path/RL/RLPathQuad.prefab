@@ -398,10 +398,8 @@ MonoBehaviour:
   - {x: 0.5, y: 0, z: 0.5}
   - {x: 0.5, y: 0, z: -0.5}
   - {x: -0.5, y: 0, z: -0.5}
-  RandomStart: 0
-  LandingRLStart: 0
-  LandingPIDStart: 0
-  PIDStart: 0
+  HoverStart: 0
+  LandingStart: 0
   ShowForces: 0
 --- !u!114 &4994132126483069868
 MonoBehaviour:
@@ -422,7 +420,6 @@ MonoBehaviour:
   Body: {fileID: 5153834151695925962}
   MaxVoltage: 44.4
   Target: {fileID: 0}
-  LoopsPerIteration: 1
   ShowPath: 0
 --- !u!114 &1028980353476707365
 MonoBehaviour:
@@ -437,7 +434,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 18
+    VectorObservationSize: 21
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 4
@@ -449,7 +446,7 @@ MonoBehaviour:
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: Path Following
+  m_BehaviorName: Quadcopter
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1

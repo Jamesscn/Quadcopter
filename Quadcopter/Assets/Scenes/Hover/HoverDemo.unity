@@ -190,15 +190,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: RLHoverArea
       objectReference: {fileID: 0}
+    - target: {fileID: 2897816145596205993, guid: 8ab68892a2e0153479ef296749cbb151,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4428878176888405385, guid: 8ab68892a2e0153479ef296749cbb151,
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: d50085f21941cb389bae51ae8a10119c,
+      objectReference: {fileID: 5022602860645237092, guid: 06985d9551649a38798bc7148a8baf70,
         type: 3}
     - target: {fileID: 8356415069265447439, guid: 8ab68892a2e0153479ef296749cbb151,
         type: 3}
       propertyPath: MaxStep
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356415069265447439, guid: 8ab68892a2e0153479ef296749cbb151,
+        type: 3}
+      propertyPath: ShowTrajectory
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -290,7 +300,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 278624079}
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 0, y: 500, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -371,6 +381,11 @@ PrefabInstance:
     - target: {fileID: 7445642799792732282, guid: 5a0b1b400ecb1ff6d9cd44e697d6a19f,
         type: 3}
       propertyPath: Training
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7445642799792732282, guid: 5a0b1b400ecb1ff6d9cd44e697d6a19f,
+        type: 3}
+      propertyPath: ShowTrajectory
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -10,12 +10,14 @@ public class HoverPID : MonoBehaviour {
     public double MaxVoltage;
     public double NoiseStrength;
     public bool Training;
+    public bool ShowTrajectory;
 
     bool SentEndSignal;
     int TrainingIndex;
     int StepCount = 0;
     float Reward = 0.0F;
     bool PIDInitialized = false;
+    Vector3[] Locations = new Vector3[500];
 
     PID ThrustController;
     PID YawController;
@@ -28,7 +30,7 @@ public class HoverPID : MonoBehaviour {
         if(!PIDInitialized) {
             SetPIDConstants(new double[]{0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D});
             if(!Training) {
-                SetPIDConstants(new double[]{0.49563D, 0.49471D, 0.20688D, 0.06888D, 0.00000D, 0.03103D, 0.26550D, 0.00000D, 0.33390D});
+                SetPIDConstants(new double[]{0.47272D, 0.72427D, 0.31589D, 0.19563D, 0.01162D, 0.05865D, 0.21259D, 0.00000D, 0.18782D});
             }
             PIDInitialized = true;
             SendMessage("ResetSimulation");
@@ -99,22 +101,29 @@ public class HoverPID : MonoBehaviour {
             yaw = -Mathf.Atan2(Body.transform.forward.x, Body.transform.forward.z);
         }
 		float distance = differenceVector.magnitude;
-		float maxDistance = 10.0F;
-		float distancePower = 0.5F;
-		float spinImportance = 0.02F;
-        float angleImportance = 0.02F;
-		float distanceReward = Mathf.Max(0.0F, 1.0F - Mathf.Pow(distance / maxDistance, distancePower));
-		float spinPenalty = -spinImportance * Body.angularVelocity.magnitude;
-        float anglePenalty = -angleImportance * Mathf.Abs(yaw);
-        Reward += Mathf.Max(0.0F, (distanceReward + spinPenalty + anglePenalty)) / Mathf.Max(1.0F, MaxStep);
-        if(StepCount > MaxStep && Training && !SentEndSignal) {
-            float speed = Body.velocity.magnitude;
-            float angularSpeed = Body.angularVelocity.magnitude;
+        float speed = Body.velocity.magnitude;
+        float angularSpeed = Body.angularVelocity.magnitude;
+        Reward += Mathf.Exp(- 0.4F * Mathf.Pow(distance, 0.8F)
+                            - 1.0F * Mathf.Pow(Mathf.Abs(yaw), 1.4F)
+                            - 0.8F * Mathf.Pow(angularSpeed, 1.2F)) / Mathf.Max(1.0F, MaxStep);
+        if(StepCount == MaxStep - 1 && Training && !SentEndSignal) {
             float[] endValues = {Reward, distance, speed, angularSpeed, yaw, pitch, roll};
             Tuple<int, float[]> endData = new Tuple<int, float[]>(TrainingIndex, endValues);
             SendMessageUpwards("EpisodeEnded", endData);
             SentEndSignal = true;
         }
     }
+
+    void OnDrawGizmos() {
+		/*
+        Locations[StepCount - 1] = Body.transform.position;
+        if(ShowTrajectory && StepCount > 1) {
+            Gizmos.color = Color.black;
+            for(int i = 1; i < StepCount; i++) {
+                Gizmos.DrawRay(Locations[i - 1], Locations[i] - Locations[i - 1]);
+            }
+        }
+        */
+	}
 
 }

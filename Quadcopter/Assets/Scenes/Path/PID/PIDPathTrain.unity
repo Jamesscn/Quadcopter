@@ -242,8 +242,7 @@ MonoBehaviour:
   Separation: 8
   SurvivalProportion: 0.4
   MutationProbability: 0.2
-  MaxPIDValue: 0.75
-  TaskName: Path
+  MaxPIDValue: 0.5
   QuickTimescale: 1
 --- !u!4 &1309134127
 Transform:

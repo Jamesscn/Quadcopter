@@ -12,12 +12,13 @@ public class GATrainer : MonoBehaviour {
     public double SurvivalProportion;
     public double MutationProbability;
     public double MaxPIDValue;
-    public string TaskName;
     public bool QuickTimescale;
 
+    int GenerationLimit = 250;
+    int NoisePasses = 5;
+    int NoiseIterations;
     int EpisodesCompleted;
-    float BestEpisodeFitness;
-    float[] BestEpisodeData;
+    int GenerationsCompleted;
 
     List<float[]> LoggedFittestData;
     List<float> LoggedEpisodeEnds;
@@ -30,8 +31,9 @@ public class GATrainer : MonoBehaviour {
             Time.timeScale = 100;
         }
         PIDTrainer = new GeneticAlgorithm(Instances, 9, 0.0D, MaxPIDValue, SurvivalProportion, MutationProbability);
+        NoiseIterations = 0;
         EpisodesCompleted = 0;
-        BestEpisodeFitness = -0.1F;
+        GenerationsCompleted = 0;
         LoggedFittestData = new List<float[]>();
         LoggedEpisodeEnds = new List<float>();
         TrainingAreas = new GameObject[Instances];
@@ -48,24 +50,35 @@ public class GATrainer : MonoBehaviour {
     }
 
     void EpisodeEnded(Tuple<int, float[]> endData) {
-        float[] endValues = endData.Item2;
-        float fitness = endValues[0];
-        if(fitness > BestEpisodeFitness) {
-            BestEpisodeFitness = fitness;
-            BestEpisodeData = endValues;
+        float[] endValues = new float[7];
+        float fitness = endData.Item2[0];
+        for(int i = 0; i < 7; i++) {
+            endValues[i] = (float)endData.Item2[i] / NoisePasses;
         }
-        PIDTrainer.SetFitness(endData.Item1, fitness);
+        PIDTrainer.AddFitness(endData.Item1, (float)fitness / NoisePasses);
+        PIDTrainer.AggregateData(endData.Item1, endValues);
         EpisodesCompleted++;
     }
 
     void FixedUpdate() {
         if(EpisodesCompleted == Instances) {
-            Debug.Log("Fitness: " + BestEpisodeFitness);
-            LoggedFittestData.Add(BestEpisodeData);
-            LoggedEpisodeEnds.Add(Time.timeSinceLevelLoad);
-            PIDTrainer.Evolve();    
-            BestEpisodeFitness = 0.0F;
             EpisodesCompleted = 0;
+            NoiseIterations++;
+            if(NoiseIterations == NoisePasses) {
+                NoiseIterations = 0;
+                LoggedEpisodeEnds.Add(Time.timeSinceLevelLoad);
+                Tuple<float, float[]> TrainerData = PIDTrainer.Evolve();
+                float BestEpisodeFitness = TrainerData.Item1;
+                float[] BestEpisodeData = TrainerData.Item2;
+                Debug.Log("Fitness: " + BestEpisodeFitness);
+                BestEpisodeData[0] = BestEpisodeFitness;
+                LoggedFittestData.Add(BestEpisodeData);
+                GenerationsCompleted++;
+            }
+            if(GenerationsCompleted == GenerationLimit) {
+                Application.Quit(0);
+                //UnityEditor.EditorApplication.isPlaying = false;
+            }
             for(int i = 0; i < Instances; i++) {
                 Tuple<int, Genome> initialisationData = new Tuple<int, Genome>(i, PIDTrainer.GetGenome(i));
                 TrainingAreas[i].transform.GetChild(0).SendMessage("InitialisePID", initialisationData);
@@ -77,12 +90,12 @@ public class GATrainer : MonoBehaviour {
         string CSVOutput = "Iteration, Time, Fitness, Final Distance, Final Speed, Final Angular Speed, Final Yaw, Final Pitch, Final Roll\n";
         for(int i = 0; i < LoggedFittestData.Count; i++) {
             CSVOutput += i.ToString() + ", " + LoggedEpisodeEnds[i].ToString();
-            for(int j = 0; j <= 6; j++) {
+            for(int j = 0; j < 7; j++) {
                 CSVOutput += ", " + LoggedFittestData[i][j].ToString();
             } 
             CSVOutput += "\n";
         }
-        StreamWriter Writer = new StreamWriter("results/" + TaskName + "PID/TrainingData.csv", false);
+        StreamWriter Writer = new StreamWriter("tmp/TrainingData.csv", false);
         Writer.Write(CSVOutput);
         Writer.Close();
         string TXTOutput = "";
@@ -93,7 +106,7 @@ public class GATrainer : MonoBehaviour {
                 TXTOutput += ", ";
             }
         }
-        Writer = new StreamWriter("results/" + TaskName + "PID/Parameters.txt", false);
+        Writer = new StreamWriter("tmp/Parameters.txt", false);
         Writer.Write(TXTOutput);
         Writer.Close();
         Debug.Log("Wrote PID data to file");

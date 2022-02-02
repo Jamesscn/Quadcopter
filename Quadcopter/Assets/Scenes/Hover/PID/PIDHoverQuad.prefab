@@ -396,8 +396,10 @@ MonoBehaviour:
   - {x: 0.5, y: 0, z: 0.5}
   - {x: 0.5, y: 0, z: -0.5}
   - {x: -0.5, y: 0, z: -0.5}
-  RandomStart: 0
-  PIDStart: 1
+  HoverStart: 1
+  PathStart: 0
+  LandingStart: 0
+  ShowForces: 0
 --- !u!114 &8988806231219086720
 MonoBehaviour:
   m_ObjectHideFlags: 0

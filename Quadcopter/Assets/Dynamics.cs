@@ -11,10 +11,8 @@ public class Dynamics : MonoBehaviour {
 	public Rigidbody Body;
 	public GameObject[] RotorObjects;
 	public Vector3[] RotorPositions;
-	public bool RandomStart;
-	public bool LandingRLStart;
-	public bool LandingPIDStart;
-	public bool PIDStart;
+	public bool HoverStart;
+	public bool LandingStart;
 	public bool ShowForces;
 	Rotor[] Rotors = {
 		new Rotor(),
@@ -36,28 +34,16 @@ public class Dynamics : MonoBehaviour {
 		for(int i = 0; i < 4; i++) {
 			Rotors[i].ResetRotor();
 		}
-		if(RandomStart) {
+		if(HoverStart) {
 			float InitialYaw = UnityEngine.Random.Range(-90.0F, 90.0F);
 			float InitialPitch = UnityEngine.Random.Range(-45.0F, 45.0F);
 			float InitialRoll = UnityEngine.Random.Range(-45.0F, 45.0F);
 			Body.transform.localRotation = Quaternion.Euler(InitialPitch, InitialYaw, InitialRoll);
 			Body.transform.localPosition = UnityEngine.Random.insideUnitSphere * 5.0F;
-		} else if(LandingRLStart) {
-			float InitialYaw = UnityEngine.Random.Range(-90.0F, 90.0F);
-			float InitialPitch = UnityEngine.Random.Range(-45.0F, 45.0F);
-			float InitialRoll = UnityEngine.Random.Range(-45.0F, 45.0F);
+		} else if(LandingStart) {
 			float PositionAngle = UnityEngine.Random.Range(0.0F, 2.0F * Mathf.PI);
-			Body.transform.localRotation = Quaternion.Euler(InitialPitch, InitialYaw, InitialRoll);
-			Body.transform.localPosition = new Vector3(Mathf.Cos(PositionAngle), 1, Mathf.Sin(PositionAngle)) * 5.0F;
-		} else if (LandingPIDStart) {
-			Body.transform.localRotation = Quaternion.Euler(45, 90, -45);
-			Body.transform.localPosition = new Vector3(Mathf.Cos(Mathf.PI / 4.0F), 1, Mathf.Cos(Mathf.PI / 4.0F)) * 5.0F;
-		} else if(PIDStart) {
-			Body.transform.localRotation = Quaternion.Euler(45, 90, -45);
-			Body.transform.localPosition = new Vector3(1, 1, 1).normalized * 5.0F;
-		} else {
 			Body.transform.localRotation = Quaternion.identity;
-			Body.transform.localPosition = Vector3.zero;
+			Body.transform.localPosition = new Vector3(Mathf.Cos(PositionAngle), 1.0F, Mathf.Sin(PositionAngle)) * 5.0F;
 		}
 		MotorVoltages = new double[] {0.0D, 0.0D, 0.0D, 0.0D};
 		Body.gameObject.SetActive(false);

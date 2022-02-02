@@ -210,7 +210,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 372861562}
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 0, y: 500, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -293,7 +293,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 873464645}
   m_LocalRotation: {x: 0.17364816, y: 0, z: 0, w: 0.9848078}
-  m_LocalPosition: {x: 0, y: 4.64, z: -7.88}
+  m_LocalPosition: {x: 0, y: 5.45, z: -10.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -550,6 +550,7 @@ MonoBehaviour:
   Body: {fileID: 2218605610084992485}
   MaxVoltage: 44.4
   Ground: {fileID: 9108220127803971082}
+  ShowTrajectory: 0
 --- !u!1 &2151732706458730485
 GameObject:
   m_ObjectHideFlags: 0
@@ -736,10 +737,8 @@ MonoBehaviour:
   - {x: 0.5, y: 0, z: 0.5}
   - {x: 0.5, y: 0, z: -0.5}
   - {x: -0.5, y: 0, z: -0.5}
-  RandomStart: 0
-  LandingRLStart: 1
-  LandingPIDStart: 0
-  PIDStart: 0
+  HoverStart: 0
+  LandingStart: 1
   ShowForces: 0
 --- !u!33 &3213039358871698691
 MeshFilter:
@@ -904,7 +903,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e3ec9adf3aea1396d9582b2b5dee393f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -977,7 +976,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e3ec9adf3aea1396d9582b2b5dee393f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1039,6 +1038,7 @@ MonoBehaviour:
   MaxVoltage: 44.4
   NoiseStrength: 0
   Training: 0
+  ShowTrajectory: 0
 --- !u!23 &5010483751063001266
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1250,7 +1250,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 5c6f451f2ee261edd809af1241dbba97, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: 151ed5b47a143995e8633b40b12cb11e, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: Quadcopter
@@ -1345,10 +1345,8 @@ MonoBehaviour:
   - {x: 0.5, y: 0, z: 0.5}
   - {x: 0.5, y: 0, z: -0.5}
   - {x: -0.5, y: 0, z: -0.5}
-  RandomStart: 0
-  LandingRLStart: 1
-  LandingPIDStart: 0
-  PIDStart: 0
+  HoverStart: 0
+  LandingStart: 1
   ShowForces: 0
 --- !u!4 &7304066589062744228
 Transform:

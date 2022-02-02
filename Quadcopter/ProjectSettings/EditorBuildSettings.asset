@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Landing/RL/RLLandingTrain.unity
-    guid: b780c191fb4932cd6ba88bbc34c4bf09
+    path: Assets/Scenes/Path/RL/RLPathTrain.unity
+    guid: 6015a1f9153bcd1c3aa621940e721772
   m_configObjects:
     com.unity.ml-agents.settings: {fileID: 11400000, guid: 69b49a99b6166df599fa62bb1c77ee9b,
       type: 2}

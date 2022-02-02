@@ -18,7 +18,7 @@ public class RotorTest : MonoBehaviour {
     void FixedUpdate() {
         //The following code simulates a step response and prints the time, input and outputs at each time step to the CSV file.
         double TimeElapsed = Time.fixedTime - StartTime;
-        if(TimeElapsed < 0.4D) {
+        if(TimeElapsed < 0.5D) {
             double Voltage = 0.0D;
             if(TimeElapsed > 0.1D) {
                 Voltage = 1.0D;

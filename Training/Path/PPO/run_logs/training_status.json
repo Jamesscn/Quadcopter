@@ -1,0 +1,65 @@
+{
+    "Quadcopter": {
+        "checkpoints": [
+            {
+                "steps": 134999947,
+                "file_path": "results/RLPath/Quadcopter/Quadcopter-134999947.onnx",
+                "reward": 0.5143784961546771,
+                "creation_time": 1629978480.4853866,
+                "auxillary_file_paths": [
+                    "results/RLPath/Quadcopter/Quadcopter-134999947.pt"
+                ]
+            },
+            {
+                "steps": 139999726,
+                "file_path": "results/RLPath/Quadcopter/Quadcopter-139999726.onnx",
+                "reward": 0.514992393934686,
+                "creation_time": 1629989872.7803607,
+                "auxillary_file_paths": [
+                    "results/RLPath/Quadcopter/Quadcopter-139999726.pt"
+                ]
+            },
+            {
+                "steps": 144999642,
+                "file_path": "results/RLPath/Quadcopter/Quadcopter-144999642.onnx",
+                "reward": 0.5110626518726349,
+                "creation_time": 1630001078.501895,
+                "auxillary_file_paths": [
+                    "results/RLPath/Quadcopter/Quadcopter-144999642.pt"
+                ]
+            },
+            {
+                "steps": 149999813,
+                "file_path": "results/RLPath/Quadcopter/Quadcopter-149999813.onnx",
+                "reward": 0.517978468706662,
+                "creation_time": 1630010991.4189916,
+                "auxillary_file_paths": [
+                    "results/RLPath/Quadcopter/Quadcopter-149999813.pt"
+                ]
+            },
+            {
+                "steps": 150071669,
+                "file_path": "results/RLPath/Quadcopter/Quadcopter-150071669.onnx",
+                "reward": 0.5177446673624218,
+                "creation_time": 1630011000.447677,
+                "auxillary_file_paths": [
+                    "results/RLPath/Quadcopter/Quadcopter-150071669.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 150071669,
+            "file_path": "results/RLPath/Quadcopter.onnx",
+            "reward": 0.5177446673624218,
+            "creation_time": 1630011000.447677,
+            "auxillary_file_paths": [
+                "results/RLPath/Quadcopter/Quadcopter-150071669.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.27.0",
+        "torch_version": "1.8.1+cu102"
+    }
+}

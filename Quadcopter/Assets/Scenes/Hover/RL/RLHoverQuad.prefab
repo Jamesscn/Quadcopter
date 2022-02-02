@@ -162,10 +162,8 @@ MonoBehaviour:
   - {x: 0.5, y: 0, z: 0.5}
   - {x: 0.5, y: 0, z: -0.5}
   - {x: -0.5, y: 0, z: -0.5}
-  RandomStart: 1
-  LandingRLStart: 0
-  LandingPIDStart: 0
-  PIDStart: 0
+  HoverStart: 1
+  LandingStart: 0
   ShowForces: 0
 --- !u!114 &1943983140714171719
 MonoBehaviour:
@@ -211,7 +209,7 @@ MonoBehaviour:
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: Hovering
+  m_BehaviorName: Quadcopter
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
